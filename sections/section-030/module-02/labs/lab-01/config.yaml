@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-008"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "lab-008-setup"
+      description: "Creates watched-ns and excluded-ns plus a curl probe Pod for scraping the metrics endpoint"
+      type: "file"
+      source: "bootstrap/02-setup-metrics-config-lab.sh"
+
+validation:
+  scripts:
+    - name: "verify-metrics-configuration"
+      description: "Confirms the kyverno-metrics ConfigMap changes took effect on the endpoint: per-namespace attribution enabled, excluded-ns unmeasured, and custom histogram buckets in use"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false

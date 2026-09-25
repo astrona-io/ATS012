@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-005"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "lab-005-setup"
+      description: "Creates batch-ns and platform-ns and pre-enables PolicyExceptions scoped to platform-ns"
+      type: "file"
+      source: "bootstrap/02-prepare-exception-feature.sh"
+
+validation:
+  scripts:
+    - name: "verify-narrow-and-governed-exception"
+      description: "Confirms the exception-hygiene policy blocks unannotated exceptions and that the condition-gated exemption admits only workloads that opt in by label"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-009"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "capstone-030-setup"
+      description: "Creates the measured svc-a-ns and the unmeasured ci-ns, plus a curl probe Pod"
+      type: "file"
+      source: "bootstrap/02-setup-capstone.sh"
+
+validation:
+  scripts:
+    - name: "verify-metrics-capstone"
+      description: "Confirms the metrics configuration, that enforcement is identical in both namespaces, and that the endpoint attributes results to svc-a-ns while mentioning ci-ns nowhere"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false
