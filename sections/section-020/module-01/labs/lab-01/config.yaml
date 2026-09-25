@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-004"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "lab-004-setup"
+      description: "Creates legacy-ns with a pre-existing Deployment that has no resource limits, plus the platform-ns exception namespace"
+      type: "file"
+      source: "bootstrap/02-seed-legacy-workload.sh"
+
+validation:
+  scripts:
+    - name: "verify-policyexception"
+      description: "Confirms the Enforce policy blocks new violators, exceptions are enabled and scoped on both controllers, and the exempted legacy workload is admitted and reported as skip"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false

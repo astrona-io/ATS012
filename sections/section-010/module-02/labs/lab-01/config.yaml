@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-002"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "lab-002-setup"
+      description: "Creates legacy-ns and quiet-ns, each with a pre-existing Deployment that has no resource limits"
+      type: "file"
+      source: "bootstrap/02-seed-namespaces.sh"
+
+validation:
+  scripts:
+    - name: "verify-reports-pipeline-tuning"
+      description: "Confirms the background scan interval was lowered, resourceFilters is honoured by the reports controller, the pre-existing legacy-ns workload is reported, and quiet-ns is not"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false

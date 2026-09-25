@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-003"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "capstone-010-setup"
+      description: "Creates prod-ns and staging-ns with two pre-existing Deployments in different compliance states"
+      type: "file"
+      source: "bootstrap/02-seed-workloads.sh"
+
+validation:
+  scripts:
+    - name: "verify-policy-reports-capstone"
+      description: "Confirms the tuned scan interval, the scored/advisory/admission-only policy set, and that fail, warn and background-exclusion all land exactly where they should"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,254 @@
+training:
+  id: ATS012
+  title: "KCA: Policy Management"
+  description: >
+    Training material covering the Kyverno Certified Associate (KCA)
+    Policy Management domain — policy reports, policy exceptions and
+    Kyverno metrics — with hands-on labs for each competency.
+
+  certification:
+    name: Kyverno Certified Associate
+    code: KCA
+    provider: CNCF / Linux Foundation
+    domain: Policy Management
+
+modules:
+  - id: module-010
+    title: "Section 010: Policy Reports"
+    description: >
+      Read PolicyReport and ClusterPolicyReport objects, interpret the five
+      result types, and operate the reporting pipeline that produces them —
+      the admission path, the background scan, and the flags that tune both.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Module 1: Reading PolicyReports"
+        path: sections/section-010/module-01/course.md
+
+      - type: reading
+        title: "Module 1.1: PolicyReport and ClusterPolicyReport"
+        path: sections/section-010/module-01/course-01-policyreport-and-clusterpolicyreport.md
+
+      - type: reading
+        title: "Module 1.2: Reading Results — the Five Result Types"
+        path: sections/section-010/module-01/course-02-reading-results-and-result-types.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-010/module-01/labs/lab-01/solution.md
+
+      - type: lab
+        title: "Reading PolicyReports Lab"
+        path: sections/section-010/module-01/labs/lab-01
+
+      - type: reading
+        title: "Module 2: The Reports Pipeline & Its Tuning"
+        path: sections/section-010/module-02/course.md
+
+      - type: reading
+        title: "Module 2.1: The Reports Pipeline"
+        path: sections/section-010/module-02/course-01-the-reports-pipeline.md
+
+      - type: reading
+        title: "Module 2.2: Tuning and Troubleshooting Reports"
+        path: sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/module-02/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-010/module-02/labs/lab-01/solution.md
+
+      - type: lab
+        title: "Reports Pipeline Tuning Lab"
+        path: sections/section-010/module-02/labs/lab-01
+
+      - type: reading
+        title: "Section 010 Knowledge Check: Policy Reports"
+        path: sections/section-010/quiz.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-010/capstone/labs/lab-01/solution.md
+
+      - type: lab
+        title: "Policy Reports Capstone Lab"
+        path: sections/section-010/capstone/labs/lab-01
+
+  - id: module-020
+    title: "Section 020: PolicyExceptions"
+    description: >
+      Enable and scope the PolicyException feature, write exceptions that
+      waive exactly the rules they should — including autogen rules — narrow
+      them with conditions and podSecurity, and govern and audit them.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Module 1: Enabling & Writing a PolicyException"
+        path: sections/section-020/module-01/course.md
+
+      - type: reading
+        title: "Module 1.1: Enabling PolicyExceptions"
+        path: sections/section-020/module-01/course-01-enabling-policyexceptions.md
+
+      - type: reading
+        title: "Module 1.2: The Anatomy of a PolicyException"
+        path: sections/section-020/module-01/course-02-anatomy-of-a-policyexception.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-020/module-01/labs/lab-01/solution.md
+
+      - type: lab
+        title: "PolicyException Lab"
+        path: sections/section-020/module-01/labs/lab-01
+
+      - type: reading
+        title: "Module 2: Narrowing, Governing & Auditing Exceptions"
+        path: sections/section-020/module-02/course.md
+
+      - type: reading
+        title: "Module 2.1: Narrowing an Exception — conditions, podSecurity & background"
+        path: sections/section-020/module-02/course-01-conditions-podsecurity-and-background.md
+
+      - type: reading
+        title: "Module 2.2: Governance, Alternatives & Auditing"
+        path: sections/section-020/module-02/course-02-governance-and-alternatives.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/module-02/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-020/module-02/labs/lab-01/solution.md
+
+      - type: lab
+        title: "Narrow & Governed Exceptions Lab"
+        path: sections/section-020/module-02/labs/lab-01
+
+      - type: reading
+        title: "Section 020 Knowledge Check: PolicyExceptions"
+        path: sections/section-020/quiz.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-020/capstone/labs/lab-01/solution.md
+
+      - type: lab
+        title: "PolicyExceptions Capstone Lab"
+        path: sections/section-020/capstone/labs/lab-01
+
+  - id: module-030
+    title: "Section 030: Kyverno Metrics"
+    description: >
+      Scrape Kyverno's Prometheus endpoint, read the core metric families and
+      their labels, and configure measurement through the kyverno-metrics
+      ConfigMap — namespace selection, label cardinality and histogram buckets.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Module 1: The Metrics Endpoint & Core Metric Families"
+        path: sections/section-030/module-01/course.md
+
+      - type: reading
+        title: "Module 1.1: The Metrics Endpoint and Its Services"
+        path: sections/section-030/module-01/course-01-metrics-endpoint-and-services.md
+
+      - type: reading
+        title: "Module 1.2: The Core Metric Families"
+        path: sections/section-030/module-01/course-02-core-metric-families.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-030/module-01/labs/lab-01/solution.md
+
+      - type: lab
+        title: "Kyverno Metrics Endpoint Lab"
+        path: sections/section-030/module-01/labs/lab-01
+
+      - type: reading
+        title: "Module 2: Configuring Metrics & Controlling Cardinality"
+        path: sections/section-030/module-02/course.md
+
+      - type: reading
+        title: "Module 2.1: The kyverno-metrics ConfigMap"
+        path: sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
+
+      - type: reading
+        title: "Module 2.2: Using Metrics in Practice"
+        path: sections/section-030/module-02/course-02-using-metrics-in-practice.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/module-02/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-030/module-02/labs/lab-01/solution.md
+
+      - type: lab
+        title: "Metrics Configuration Lab"
+        path: sections/section-030/module-02/labs/lab-01
+
+      - type: reading
+        title: "Section 030 Knowledge Check: Kyverno Metrics"
+        path: sections/section-030/quiz.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+
+      - type: reading
+        title: Solution Walkthrough
+        path: sections/section-030/capstone/labs/lab-01/solution.md
+
+      - type: lab
+        title: "Kyverno Metrics Capstone Lab"
+        path: sections/section-030/capstone/labs/lab-01
+
+  - id: module-040
+    title: "KCA Policy Management Domain Certification Quiz"
+    description: >
+      A comprehensive, scenario-based final assessment covering all three
+      sections of the Policy Management domain, simulating actual KCA exam
+      pressure.
+
+    content:
+      - type: reading
+        title: "Final Domain Certification Quiz"
+        path: sections/final-domain-quiz.md

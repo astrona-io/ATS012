@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-006"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "capstone-020-setup"
+      description: "Creates prod-ns with a pre-existing limitless Deployment, plus platform-ns and rogue-ns"
+      type: "file"
+      source: "bootstrap/02-seed-environment.sh"
+
+validation:
+  scripts:
+    - name: "verify-governed-exception-process"
+      description: "Confirms the scoped feature flags, the hygiene policy, a working exemption with an auditable skip result, and that an exception outside the exception namespace has no effect"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false
