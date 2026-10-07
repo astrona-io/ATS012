@@ -48,6 +48,7 @@ modules:
       - type: lab
         title: "Reading PolicyReports Lab"
         path: sections/section-010/module-01/labs/lab-01
+        difficulty: intermediate
 
       - type: reading
         title: "Module 2: The Reports Pipeline & Its Tuning"
@@ -72,6 +73,7 @@ modules:
       - type: lab
         title: "Reports Pipeline Tuning Lab"
         path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
 
       - type: reading
         title: "Section 010 Knowledge Check: Policy Reports"
@@ -88,6 +90,7 @@ modules:
       - type: lab
         title: "Policy Reports Capstone Lab"
         path: sections/section-010/capstone/labs/lab-01
+        difficulty: advanced
 
   - id: module-020
     title: "Section 020: PolicyExceptions"
@@ -124,6 +127,7 @@ modules:
       - type: lab
         title: "PolicyException Lab"
         path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
 
       - type: reading
         title: "Module 2: Narrowing, Governing & Auditing Exceptions"
@@ -148,6 +152,7 @@ modules:
       - type: lab
         title: "Narrow & Governed Exceptions Lab"
         path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
 
       - type: reading
         title: "Section 020 Knowledge Check: PolicyExceptions"
@@ -164,6 +169,7 @@ modules:
       - type: lab
         title: "PolicyExceptions Capstone Lab"
         path: sections/section-020/capstone/labs/lab-01
+        difficulty: advanced
 
   - id: module-030
     title: "Section 030: Kyverno Metrics"
@@ -200,6 +206,7 @@ modules:
       - type: lab
         title: "Kyverno Metrics Endpoint Lab"
         path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
 
       - type: reading
         title: "Module 2: Configuring Metrics & Controlling Cardinality"
@@ -224,6 +231,7 @@ modules:
       - type: lab
         title: "Metrics Configuration Lab"
         path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
 
       - type: reading
         title: "Section 030 Knowledge Check: Kyverno Metrics"
@@ -240,6 +248,7 @@ modules:
       - type: lab
         title: "Kyverno Metrics Capstone Lab"
         path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
 
   - id: module-040
     title: "KCA Policy Management Domain Certification Quiz"
