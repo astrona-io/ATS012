@@ -344,3 +344,69 @@ questions:
   explanation: Deleting the exception removes the waiver, not the workload. New admissions
     are judged normally and the next scan records `fail`, so the fix has to be planned
     before the expiry.
+- id: ats012-020-q15
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Choose the match fields of a PolicyException"
+  source_readings:
+  - sections/section-020/module-01/course-03-matching-resources-in-an-exception.md
+  prompt: "Which statement about the `match` block of a PolicyException is correct?"
+  options:
+  - id: a
+    text: "It selects the resources the exception applies to, and the exception only affects policy rules it lists in `exceptions`."
+    explanation: "Correct."
+  - id: b
+    text: "It selects the policies to delete."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "It must use the same name as the policy."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "It applies to every resource in the cluster."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "The exception lists the policy and rule names it waives and uses `match` to select which resources get the waiver."
+- id: ats012-020-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Review exceptions across namespaces"
+  source_readings:
+  - sections/section-020/module-02/course-04-reviewing-exceptions-at-scale.md
+  prompt: "Which command lists every PolicyException in the cluster?"
+  options:
+  - id: a
+    text: "`kubectl get policyexceptions -A`"
+    explanation: "Correct."
+  - id: b
+    text: "`kubectl get polr -A`"
+    explanation: "This lists PolicyReports."
+  - id: c
+    text: "`kubectl get cpol`"
+    explanation: "This lists ClusterPolicies."
+  - id: d
+    text: "`kubectl get exceptions`"
+    explanation: "This is not a resource name Kyverno registers."
+  correct_option: a
+  explanation: "PolicyException is namespaced, so `-A` lists all of them. `polex` is the short name."
+- id: ats012-020-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Name the Kyverno object that deletes expired resources"
+  source_readings:
+  - sections/section-020/module-03/course-04-cleanup-policies-as-a-safety-net.md
+  prompt: "Which Kyverno resource deletes matching resources on a schedule?"
+  options:
+  - id: a
+    text: "`ClusterCleanupPolicy` or `CleanupPolicy`"
+    explanation: "Correct."
+  - id: b
+    text: "`ClusterPolicy` with `validate`"
+    explanation: "A validate rule only allows or blocks requests."
+  - id: c
+    text: "`PolicyReport`"
+    explanation: "A report records results and deletes nothing."
+  - id: d
+    text: "`UpdateRequest`"
+    explanation: "This is an internal object for generate and mutate-existing work."
+  correct_option: a
+  explanation: "Cleanup policies run in the cleanup controller on a cron schedule and delete the resources they match."

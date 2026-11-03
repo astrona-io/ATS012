@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-011"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno-cli"
+      description: "Installs the Kyverno CLI v1.13.2"
+      type: "file"
+      source: "bootstrap/01-install-kyverno-cli.sh"
+    - name: "capstone-040-setup"
+      description: "Writes a validate policy, a mutate policy and two Pods to /opt/kyverno-capstone"
+      type: "file"
+      source: "bootstrap/02-seed.sh"
+
+validation:
+  scripts:
+    - name: "verify-policy-tests"
+      description: "Confirms the test covers validate and mutate rules, that run-tests.sh passes, and that the test fails when the mutate policy is changed"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false

@@ -72,5 +72,3 @@ Apply `require-exception-ttl`, then try to create an exception without the label
 ```bash
 kubectl get policyexception -A -L cleanup.kyverno.io/ttl
 ```
-
-Next: [Summary](./course-03-summary.md)

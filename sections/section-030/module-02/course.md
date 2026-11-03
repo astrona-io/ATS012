@@ -10,6 +10,9 @@ This module covers the ConfigMap where those decisions live, how to turn a dimen
 
 1. **[Part 1 — The kyverno-metrics ConfigMap](./course-01-the-kyverno-metrics-configmap.md)** — `namespaces`, `metricsExposure`, `bucketBoundaries`: what each key does, the exact formats, and how to change them safely.
 2. **[Part 2 — Using Metrics in Practice](./course-02-using-metrics-in-practice.md)** — the queries and alerts worth having, and diagnosing real incidents from the numbers.
+3. **[Exporting Metrics with OpenTelemetry](./course-03-exporting-metrics-with-opentelemetry.md)** — the Prometheus and gRPC export modes and the flags that choose between them.
+4. **[Cardinality and the Series Budget](./course-04-cardinality-and-series-budget.md)** — counting series and the four configuration levers that reduce them.
+5. **[Summary](./course-05-summary.md)** — the module on one page.
 
 ## Learning objectives
 
@@ -23,6 +26,8 @@ After this module you can:
 - Explain why a metrics configuration change needs a controller restart to be fully reflected.
 - Write the handful of alerts that actually matter for a Kyverno installation.
 - Diagnose "the cluster got slow after we rolled out policy" from metrics alone.
+- Choose between the Prometheus and gRPC export modes and set the matching flags.
+- Count Kyverno series and reduce them with the ConfigMap levers.
 
 ## Before you start
 

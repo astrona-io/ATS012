@@ -15,3 +15,4 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Try a `podSecurity` exclusion on a Pod Security Standards policy.
 - List every exemption in force: `kubectl get policyexception -A` and the `skip` results in reports.
 - Compare an exception with an `exclude` block for the same workload.
+- Write a `podSecurity` exception with `controlName` and `images`, then list exceptions with `kubectl get policyexception -A -o custom-columns`.

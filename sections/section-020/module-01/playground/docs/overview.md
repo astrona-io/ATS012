@@ -16,3 +16,4 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Write an exception that names only `check-limits` and see that new Deployment Pods stay blocked (the autogen trap), then fix it.
 - Narrow the `match` to names beginning with `legacy-api` and prove another name is still blocked.
 - Create an exception in `legacy-ns` instead of `platform-ns` and see that it is ignored.
+- Switch the exception's `match` from `names` to a `selector` on a Pod label and confirm only labelled Pods are exempt.

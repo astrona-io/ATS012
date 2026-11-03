@@ -19,6 +19,8 @@ flowchart TD
 
 1. **[Part 1 — PolicyReport and ClusterPolicyReport](./course-01-policyreport-and-clusterpolicyreport.md)** — the two CRDs, who owns them, how they are named and scoped, and what is inside one.
 2. **[Part 2 — Reading Results: the Five Result Types](./course-02-reading-results-and-result-types.md)** — what `pass`, `fail`, `warn`, `error`, and `skip` each mean, and how to query for exactly the one you care about.
+3. **Part 3 — Querying Reports with kubectl** — printer columns, labels, custom columns, jsonpath filters and `kubectl explain`.
+4. **Part 4 — Reports in Automation and the Kyverno CLI** — counting with `jq`, a pipeline gate, and `kyverno apply --policy-report`.
 
 ## Learning objectives
 
@@ -30,6 +32,7 @@ After this module you can:
 - Distinguish `pass`, `fail`, `warn`, `error`, and `skip`, and name the specific condition that produces each.
 - Explain what the `policies.kyverno.io/scored: "false"` annotation changes about a report.
 - Pull just the failing results out of a report with `kubectl` and `jsonpath`, without reading the whole object.
+- Build a `kubectl` or `jq` query that counts failing results, and say what such a gate cannot see.
 
 ## Before you start
 

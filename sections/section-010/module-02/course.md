@@ -22,6 +22,8 @@ flowchart TD
 
 1. **[Part 1 — The Reports Pipeline](./course-01-the-reports-pipeline.md)** — the admission path, the background path, the intermediate `EphemeralReport` objects, and which controller owns each step.
 2. **[Part 2 — Tuning and Troubleshooting Reports](./course-02-tuning-and-troubleshooting-reports.md)** — `--backgroundScanInterval`, `--backgroundScanWorkers`, `--enableReporting`, `resourceFilters`, and the diagnostic order for a report that is not there.
+3. **Part 3 — Report Resources and Permissions** — the four staging kinds, and the aggregated ClusterRole the reports controller needs for custom resources.
+4. **Part 4 — Policy Settings That Shape Reports** — `validationFailureAction`, `spec.background`, `spec.admission`, and the variables background mode cannot use.
 
 ## Learning objectives
 
@@ -34,6 +36,8 @@ After this module you can:
 - Explain what `--enableReporting` controls and what happens when you remove a rule type from it.
 - Explain why adding a namespace to `resourceFilters` does **not**, by default, stop background-scan reports for that namespace, and name the flag that changes this.
 - Work through a missing-report diagnosis in a defensible order instead of guessing.
+- Name the four `reports.kyverno.io` kinds and give the reports controller access to a custom resource.
+- Choose `spec.background` and `spec.admission` for a policy and explain why a request-based rule cannot be scanned.
 
 ## Before you start
 

@@ -1,6 +1,6 @@
 # Part 2 — The Core Metric Families
 
-> Prerequisite: [Part 1 — The Metrics Endpoint and Its Services](./course-01-metrics-endpoint-and-services.md). Next: [Summary](./course-03-summary.md).
+> Prerequisite: [Part 1 — The Metrics Endpoint and Its Services](./course-01-metrics-endpoint-and-services.md). Next: [Summary](./course-05-summary.md).
 
 ## The `_total` surprise
 

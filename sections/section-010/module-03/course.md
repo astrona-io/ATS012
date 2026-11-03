@@ -18,7 +18,9 @@ flowchart LR
 
 1. **[Part 1 — Severity and Category in Results](./course-01-severity-and-category-in-results.md)** — the two annotations, where they land, and how to count findings across namespaces.
 2. **[Part 2 — Report Lifecycle and the Tool Ecosystem](./course-02-report-lifecycle-and-tooling.md)** — what deletes a report or a result, what Enforce leaves out, and what a tool such as Policy Reporter adds.
-3. **[Summary](./course-03-summary.md)** — the facts to keep.
+3. **Part 3 — A Triage Workflow** — group, rank, assign and decide.
+4. **Part 4 — Policy Reporter and Other Report Consumers** — what a consumer adds and which limits it shares.
+5. **Summary** — the facts to keep.
 
 ## Learning objectives
 
@@ -30,6 +32,8 @@ After this module you can:
 - Explain what happens to a report when its resource is deleted and what happens to results when a policy is deleted.
 - Explain why a request that `Enforce` rejects does not produce a report entry.
 - Describe what Policy Reporter does with reports and why it does not change what a result means.
+- Triage findings by policy and severity and decide between a fix, an exception and a policy change.
+- Install Policy Reporter and list the limits every report consumer shares.
 
 ## Before you start
 

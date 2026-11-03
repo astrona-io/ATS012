@@ -15,3 +15,4 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Draft a `PrometheusRule` for `KyvernoPolicyViolations` and keep it in a ConfigMap. The Prometheus Operator is not installed here.
 - Create more rejected requests and confirm a counter only ever goes up, even if you restart nothing.
 - Restart the admission controller and observe what happens to the counters.
+- Walk the troubleshooting order against the stock install: endpoint, Service endpoints, NetworkPolicy, then write the `absent()` expression you would alert on.

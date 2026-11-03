@@ -55,4 +55,4 @@ Resist alerting on every counter. An alert that fires without a clear action tra
 
 Write the `PrometheusRule` above to a file and check it carries what a reviewer would look for: an `alert` name, an `expr` that uses `increase(` or `rate(` on `kyverno_policy_results_total` with `rule_result="fail"`, a `for:` and a `severity` label. The lab asks for exactly this.
 
-Next: [Summary](./course-03-summary.md)
+Next: [Summary](./course-05-summary.md)

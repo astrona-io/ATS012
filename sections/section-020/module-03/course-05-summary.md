@@ -8,6 +8,8 @@ Kyverno has no built-in expiry for a `PolicyException`, and it does not read an 
 
 A policy can then make the label mandatory, so every exception has an end. After the exception is deleted, the next admission is judged by the policy again and the next background scan records `fail` again, so the workload must be fixed or the exception renewed before expiry.
 
+The cleanup controller reads the ttl label only for types its RBAC allows it to delete, so check the permission with `kubectl auth can-i` and read its log. Deletion is not exact to the second. A `ClusterCleanupPolicy` with a schedule and a `time_diff` condition adds a maximum age for any exception that was created without a ttl.
+
 The key facts to remember are these:
 
 - Expiry is a label handled by the cleanup controller, not an annotation.

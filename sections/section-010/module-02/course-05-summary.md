@@ -8,6 +8,10 @@ The admission controller records a finding while it handles a live request, so n
 
 `--backgroundScanInterval` (default `1h`) sets the scan clock, `--backgroundScanWorkers` (default `2`) sets how fast one cycle finishes, and `--enableReporting` chooses which rule types are reported. A policy with `spec.background: false` is never rescanned. `resourceFilters` is not applied to background scans unless `--skipResourceFilters=false` is set on the reports controller.
 
+Intermediate data lives in `AdmissionReport`, `ClusterAdmissionReport`, `BackgroundScanReport` and `ClusterBackgroundScanReport` objects. The reports controller can scan only the kinds its service account may read, so a policy on a custom resource needs a ClusterRole labelled `rbac.kyverno.io/aggregate-to-reports-controller: "true"`.
+
+The policy decides what is reported. `validationFailureAction` sets whether a failing request is rejected or recorded, `spec.background` and `spec.admission` choose the path, and a rule that uses request variables cannot run in the background.
+
 The key facts to remember are these:
 
 - Admission path is immediate; the background path waits for the scan interval.

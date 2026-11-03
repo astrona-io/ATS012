@@ -8,6 +8,8 @@ A `conditions` block adds a test on the resource's content, such as a label, whi
 
 Governance has two halves: RBAC decides who may create exceptions, and `--exceptionNamespace` decides where they count. A `ClusterPolicy` with `background: false` can validate `PolicyException` objects, for example requiring owner and expiry annotations. Kyverno does not interpret an expiry annotation on its own. To see what is exempted, read the `skip` results in reports, not only the exception objects; an exception that matches nothing exempts nothing.
 
+The `podSecurity` field can narrow a waiver to one control, one image through `images`, and one value through `restrictedField` and `values`. To review exceptions, list them with `kubectl` custom columns, read the owner and reason annotations, and compare the list with the exceptions named in report `skip` results. An exception that never appears there exempts nothing.
+
 The key facts to remember are these:
 
 - `conditions` narrows by content, `match` narrows by identity.

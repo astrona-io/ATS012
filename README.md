@@ -22,7 +22,7 @@ To make learning intuitive, digestible, and robust, this curriculum is built aro
 
 ## Complete Curriculum & Lab Mapping
 
-The training series is divided into **3 main sections** covering **9 focused modules**, each with an ungraded playground, **9 graded module labs** and **3 comprehensive Section Capstone Challenges**. All labs are UNTESTED: they were built and checked statically only:
+The training series is divided into **4 main sections** covering **10 focused modules**, each with an ungraded playground, **10 graded module labs** and **4 comprehensive Section Capstone Challenges**. All labs are UNTESTED: they were built and checked statically only:
 
 | Section & Domain | Module & Chapter Reader | Practice Lab | astrona CLI Run Command |
 | :--- | :--- | :--- | :--- |
@@ -38,6 +38,8 @@ The training series is divided into **3 main sections** covering **9 focused mod
 | | [M2: Configuring Metrics & Controlling Cardinality](sections/section-030/module-02/course.md) | [lab](sections/section-030/module-02/labs/lab-01) | `astrona run --git git@github.com:astrona-io/ATS012.git -c sections/section-030/module-02/labs/lab-01` |
 | | [M3: Querying Metrics & Writing Alert Rules](sections/section-030/module-03/course.md) | [lab](sections/section-030/module-03/labs/lab-01) | `astrona run --git git@github.com:astrona-io/ATS012.git -c sections/section-030/module-03/labs/lab-01` |
 | | **Section Capstone Challenge** | **[capstone](sections/section-030/capstone/labs/lab-01)** | `astrona run --git git@github.com:astrona-io/ATS012.git -c sections/section-030/capstone/labs/lab-01` |
+| **040: Policy Testing** | [M1: Testing Policies with the Kyverno CLI](sections/section-040/module-01/course.md) | [lab](sections/section-040/module-01/labs/lab-01) | `astrona run --git git@github.com:astrona-io/ATS012.git -c sections/section-040/module-01/labs/lab-01` |
+| | **Section Capstone Challenge** | **[capstone](sections/section-040/capstone/labs/lab-01)** | `astrona run --git git@github.com:astrona-io/ATS012.git -c sections/section-040/capstone/labs/lab-01` |
 
 ---
 
@@ -49,7 +51,7 @@ The training series is divided into **3 main sections** covering **9 focused mod
 4.  **Test Your Diagnostics:** Open `quiz.yaml` inside that section and answer its scenario questions. Each answer option carries an explanation.
 5.  **Practice in the Playgrounds and Labs:** Launch each module's playground from its reader, then run the module labs (e.g., `sections/section-010/module-01/labs/lab-01`) on a live kind cluster to build real operational muscle memory.
 6.  **Conquer the Capstone Challenges:** Boot up the section's **Capstone Challenge Lab**, solve the integration prompts, and run the automated validation suite to confirm your passing state.
-7.  **Simulate the Exam:** Once you have completed all 9 modules, open **`sections/final-domain-quiz.yaml`** and complete the final closed-book domain exam simulator under a time cap to audit your readiness.
+7.  **Simulate the Exam:** Once you have completed all 10 modules, open **`sections/final-domain-quiz.yaml`** and complete the final closed-book domain exam simulator under a time cap to audit your readiness.
 
 ---
 

@@ -23,7 +23,9 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 1: Reading PolicyReports](./module-01/course.md)**
     1. [PolicyReport and ClusterPolicyReport](./module-01/course-01-policyreport-and-clusterpolicyreport.md)
     2. [Reading Results: the Five Result Types](./module-01/course-02-reading-results-and-result-types.md)
-    3. [Summary](./module-01/course-03-summary.md)
+    3. [Querying Reports with kubectl](./module-01/course-03-querying-reports-with-kubectl.md)
+    4. [Reports in Automation and the Kyverno CLI](./module-01/course-04-reports-in-automation-and-the-cli.md)
+    5. [Summary](./module-01/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-010/module-01/playground`; launched from the module reader.
 *   **Practice Lab Sandbox:** **`sections/section-010/module-01/labs/lab-01`**
 *   **Lab Run Command:**
@@ -36,7 +38,9 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 2: The Reports Pipeline & Its Tuning](./module-02/course.md)**
     1. [The Reports Pipeline](./module-02/course-01-the-reports-pipeline.md)
     2. [Tuning and Troubleshooting Reports](./module-02/course-02-tuning-and-troubleshooting-reports.md)
-    3. [Summary](./module-02/course-03-summary.md)
+    3. [Report Resources and Permissions](./module-02/course-03-report-resources-and-permissions.md)
+    4. [Policy Settings That Shape Reports](./module-02/course-04-policy-settings-that-shape-reports.md)
+    5. [Summary](./module-02/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-010/module-02/playground`; launched from the module reader.
 *   **Practice Lab Sandbox:** **`sections/section-010/module-02/labs/lab-01`**
 *   **Lab Run Command:**
@@ -49,7 +53,9 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 3: Triage With Severity, Category & the Report Lifecycle](./module-03/course.md)**
     1. [Severity and Category in Results](./module-03/course-01-severity-and-category-in-results.md)
     2. [Report Lifecycle and Tooling](./module-03/course-02-report-lifecycle-and-tooling.md)
-    3. [Summary](./module-03/course-03-summary.md)
+    3. [A Triage Workflow](./module-03/course-03-a-triage-workflow.md)
+    4. [Policy Reporter and Other Report Consumers](./module-03/course-04-policy-reporter-and-report-consumers.md)
+    5. [Summary](./module-03/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-010/module-03/playground`; launched from the module reader.
 *   **Practice Lab Sandbox (UNTESTED):** **`sections/section-010/module-03/labs/lab-01`**
 *   **Lab Run Command:**

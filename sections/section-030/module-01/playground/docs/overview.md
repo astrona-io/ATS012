@@ -15,3 +15,4 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - List the labels of `kyverno_policy_results_total` and name the ones that separate admission from background scans.
 - Find the gauge `kyverno_policy_rule_info_total` and count the rules by validation mode.
 - Compare the `# TYPE` line of each family with the name you would write in PromQL.
+- Run `kubectl get crd servicemonitors.monitoring.coreos.com` and note that it fails, because the Prometheus Operator is not installed here.

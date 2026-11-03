@@ -23,7 +23,9 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 1: The Metrics Endpoint & Core Metric Families](./module-01/course.md)**
     1. [The Metrics Endpoint and Its Services](./module-01/course-01-metrics-endpoint-and-services.md)
     2. [The Core Metric Families](./module-01/course-02-core-metric-families.md)
-    3. [Summary](./module-01/course-03-summary.md)
+    3. [Scraping Kyverno with Prometheus](./module-01/course-03-scraping-kyverno-with-prometheus.md)
+    4. [Labels on Kyverno Metrics](./module-01/course-04-labels-on-kyverno-metrics.md)
+    5. [Summary](./module-01/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-030/module-01/playground`; launched from the module reader.
 *   **Practice Lab Sandbox:** **`sections/section-030/module-01/labs/lab-01`**
 *   **Lab Run Command:**
@@ -36,7 +38,9 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 2: Configuring Metrics & Controlling Cardinality](./module-02/course.md)**
     1. [The kyverno-metrics ConfigMap](./module-02/course-01-the-kyverno-metrics-configmap.md)
     2. [Using Metrics in Practice](./module-02/course-02-using-metrics-in-practice.md)
-    3. [Summary](./module-02/course-03-summary.md)
+    3. [Exporting Metrics with OpenTelemetry](./module-02/course-03-exporting-metrics-with-opentelemetry.md)
+    4. [Cardinality and the Series Budget](./module-02/course-04-cardinality-and-series-budget.md)
+    5. [Summary](./module-02/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-030/module-02/playground`; launched from the module reader.
 *   **Practice Lab Sandbox:** **`sections/section-030/module-02/labs/lab-01`**
 *   **Lab Run Command:**
@@ -49,7 +53,9 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 3: Querying Metrics & Writing Alert Rules](./module-03/course.md)**
     1. [Reading Kyverno Metrics with PromQL](./module-03/course-01-reading-kyverno-metrics-with-promql.md)
     2. [Alert Rules That Matter](./module-03/course-02-alert-rules-that-matter.md)
-    3. [Summary](./module-03/course-03-summary.md)
+    3. [Recording Rules and Dashboards](./module-03/course-03-recording-rules-and-dashboards.md)
+    4. [Troubleshooting a Missing Metrics Pipeline](./module-03/course-04-troubleshooting-a-missing-metrics-pipeline.md)
+    5. [Summary](./module-03/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-030/module-03/playground`; launched from the module reader.
 *   **Practice Lab Sandbox (UNTESTED):** **`sections/section-030/module-03/labs/lab-01`**
 *   **Lab Run Command:**

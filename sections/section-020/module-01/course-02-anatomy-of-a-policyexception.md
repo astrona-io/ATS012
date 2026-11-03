@@ -1,7 +1,5 @@
 # Part 2 — The Anatomy of a PolicyException
 
-> Prerequisite: [Part 1 — Enabling PolicyExceptions](./course-01-enabling-policyexceptions.md). Next: [Summary](./course-03-summary.md).
-
 ## The whole object
 
 ```yaml

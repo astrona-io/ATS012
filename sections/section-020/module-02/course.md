@@ -8,6 +8,8 @@ Module 1 gave you an object that waives a rule for a set of named resources. Tha
 
 1. **[Part 1 — Narrowing an Exception: conditions, podSecurity & background](./course-01-conditions-podsecurity-and-background.md)** — the fields that turn "these names" into "these resources, in this state, for this control".
 2. **[Part 2 — Governance, Alternatives & Auditing](./course-02-governance-and-alternatives.md)** — exception versus `exclude`, controlling who can create one, policing exceptions with a policy, and auditing the ones that exist.
+3. **[Part 3 — Pod Security Exceptions in Detail](./course-03-podsecurity-exceptions-in-detail.md)** — `controlName`, `images`, `restrictedField` and `values` for the narrowest possible waiver.
+4. **[Part 4 — Reviewing Exceptions at Scale](./course-04-reviewing-exceptions-at-scale.md)** — listing, attributing and testing exceptions with `kubectl`, and the three outcomes of a review.
 
 ## Learning objectives
 
@@ -20,6 +22,8 @@ After this module you can:
 - Describe the RBAC posture that makes exceptions safe, and why `--exceptionNamespace` is the other half of it.
 - Write a Kyverno policy that validates PolicyExceptions themselves — for example requiring an expiry annotation and an owner.
 - Audit every active exemption in a cluster from the reports, not from the exception objects.
+- Waive one Pod Security control for one image and one value with `controlName`, `images`, `restrictedField` and `values`.
+- Review exceptions with `kubectl` and find the ones that exempt nothing.
 
 ## Before you start
 

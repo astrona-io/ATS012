@@ -14,4 +14,5 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Count `fail` results per severity across all namespaces with a jsonpath filter.
 - Change the severity annotation on a policy and watch how long the report entries take to follow.
 - Delete `red-bad` and see its report disappear; delete a policy and see its results leave the remaining reports.
+- Group failing results by policy and by severity with `jq`, then fix one workload and recount.
 - Create a policy matching `Namespace` and find the finding in `kubectl get cpolr`.

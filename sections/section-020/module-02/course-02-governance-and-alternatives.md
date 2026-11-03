@@ -1,7 +1,5 @@
 # Part 2 — Governance, Alternatives & Auditing
 
-> Prerequisite: [Part 1 — Narrowing an Exception](./course-01-conditions-podsecurity-and-background.md). Next: [Summary](./course-03-summary.md).
-
 ## Exception or `exclude`? A decision you should be able to defend
 
 Both carve a hole. They differ in who owns the hole and where it is visible.

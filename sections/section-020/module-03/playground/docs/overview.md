@@ -16,3 +16,4 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Check that the Pod that was admitted under the exception is blocked on its next rollout after expiry.
 - Write a policy that requires the ttl label on every `PolicyException`.
 - List exceptions with their ttl labels: `kubectl get policyexception -A -L cleanup.kyverno.io/ttl`.
+- Run `kubectl auth can-i delete policyexceptions --as=system:serviceaccount:kyverno:kyverno-cleanup-controller -A` before and after adding the ClusterRole, and read `kubectl -n kyverno logs deploy/kyverno-cleanup-controller`.

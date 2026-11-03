@@ -22,6 +22,8 @@ flowchart TD
 
 1. **[Part 1 — Enabling PolicyExceptions](./course-01-enabling-policyexceptions.md)** — why the feature ships disabled, the two flags, which controllers need them, and what happens when you get it half-right.
 2. **[Part 2 — The Anatomy of a PolicyException](./course-02-anatomy-of-a-policyexception.md)** — every field in the object, the autogen rule-name trap, and how an exception shows up in a report.
+3. **[Part 3 — Matching Resources in an Exception](./course-03-matching-resources-in-an-exception.md)** — how `match` uses `any`, `all`, names, selectors and namespaces to select the exact Pods.
+4. **[Part 4 — Enabling with Helm and Troubleshooting](./course-04-enabling-with-helm-and-troubleshooting.md)** — the chart values that enable the feature and a fixed checklist for exceptions that do not apply.
 
 ## Learning objectives
 
@@ -33,6 +35,8 @@ After this module you can:
 - Write a `PolicyException` that names a policy, the specific rules within it, and the resources to exempt.
 - Explain why exempting a Deployment usually requires naming both a rule and its `autogen-` counterpart.
 - Find the exemption in a `PolicyReport` and name the field that records which exception applied.
+- Select resources with `any`, `all`, `names`, `selector` and `namespaces`, and explain why `namespaces` should always be set.
+- Enable PolicyExceptions through the Helm chart values and diagnose a non-working exception with a fixed checklist.
 
 ## Before you start
 

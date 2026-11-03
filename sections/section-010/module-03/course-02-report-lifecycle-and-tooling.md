@@ -1,6 +1,6 @@
 # Part 2 — Report Lifecycle and the Tool Ecosystem
 
-> Prerequisite: [Part 1 — Severity and Category in Results](./course-01-severity-and-category-in-results.md). Next: [Summary](./course-03-summary.md).
+> Prerequisite: [Part 1 — Severity and Category in Results](./course-01-severity-and-category-in-results.md).
 
 A report is not a log. It is the current state of one resource judged by the policies in force. Understanding when it changes and when it disappears is what lets you trust a count.
 

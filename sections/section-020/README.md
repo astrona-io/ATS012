@@ -23,7 +23,7 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 1: Enabling & Writing a PolicyException](./module-01/course.md)**
     1. [Enabling PolicyExceptions](./module-01/course-01-enabling-policyexceptions.md)
     2. [The Anatomy of a PolicyException](./module-01/course-02-anatomy-of-a-policyexception.md)
-    3. [Summary](./module-01/course-03-summary.md)
+    3. [Summary](./module-01/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-020/module-01/playground`; launched from the module reader.
 *   **Practice Lab Sandbox:** **`sections/section-020/module-01/labs/lab-01`**
 *   **Lab Run Command:**
@@ -36,7 +36,7 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 2: Narrowing, Governing & Auditing Exceptions](./module-02/course.md)**
     1. [Narrowing an Exception: conditions, podSecurity & background](./module-02/course-01-conditions-podsecurity-and-background.md)
     2. [Governance, Alternatives & Auditing](./module-02/course-02-governance-and-alternatives.md)
-    3. [Summary](./module-02/course-03-summary.md)
+    3. [Summary](./module-02/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-020/module-02/playground`; launched from the module reader.
 *   **Practice Lab Sandbox:** **`sections/section-020/module-02/labs/lab-01`**
 *   **Lab Run Command:**
@@ -49,7 +49,7 @@ This section is divided into three sequential modules, each paired with a dedica
 *   **Module Reader:** **[Module 3: Time-Boxed Exceptions & Cleanup](./module-03/course.md)**
     1. [Why Exceptions Need an End Date](./module-03/course-01-why-exceptions-need-an-end-date.md)
     2. [Enforcing and Reviewing Time-Boxed Exceptions](./module-03/course-02-enforcing-and-reviewing-time-boxed-exceptions.md)
-    3. [Summary](./module-03/course-03-summary.md)
+    3. [Summary](./module-03/course-05-summary.md)
 *   **Playground:** ungraded, `sections/section-020/module-03/playground`; launched from the module reader.
 *   **Practice Lab Sandbox (UNTESTED):** **`sections/section-020/module-03/labs/lab-01`**
 *   **Lab Run Command:**

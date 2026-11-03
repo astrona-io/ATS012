@@ -8,6 +8,8 @@ On Kyverno v1.13 a `PolicyException` is a namespaced object in `kyverno.io/v2`. 
 
 An exception has `spec.exceptions[]` (policy name and rule names) and a `match` block (the resources). A Deployment is judged through its autogen rules, so the exception must name both the rule and its `autogen-` counterpart, and the `match` must cover the Pods the Deployment creates, for example with a name wildcard. The exemption shows in a report as `result: skip` with `properties.exceptions` naming the exception.
 
+Selecting resources uses `match.any` and `match.all` with `kinds`, `names`, `selector`, `namespaces` and `namespaceSelector`; always set a namespace, because an exception only narrows a policy and never widens it. In Helm, `features.policyExceptions.enabled` and `features.policyExceptions.namespace` set both flags on every controller. When an exception does not apply, check the flags, the namespace, the policy and rule names, and the match in that order.
+
 The key facts to remember are these:
 
 - Feature flag and exception namespace are both required; the failure is silent.

@@ -15,3 +15,5 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Exclude `excluded-ns` in `namespaces` and show that enforcement there is unchanged.
 - Change `bucketBoundaries` and look at the `le` values of `kyverno_admission_review_duration_seconds_bucket`.
 - Count the series before and after each change to see what cardinality costs.
+- Read the controller flags with `kubectl -n kyverno get deploy kyverno-admission-controller -o jsonpath='{.spec.template.spec.containers[0].args}'` and find `--otelConfig`.
+- Count lines starting with `kyverno_` on the endpoint before and after excluding a namespace.

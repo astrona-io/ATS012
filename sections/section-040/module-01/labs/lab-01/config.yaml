@@ -1,0 +1,26 @@
+metadata:
+  name: "ats-012-lab-010"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno-cli"
+      description: "Installs the Kyverno CLI v1.13.2"
+      type: "file"
+      source: "bootstrap/01-install-kyverno-cli.sh"
+    - name: "lab-010-setup"
+      description: "Writes the policy and resources to /opt/kyverno-lab"
+      type: "file"
+      source: "bootstrap/02-seed.sh"
+
+validation:
+  scripts:
+    - name: "verify-kyverno-test"
+      description: "Confirms kyverno-test.yaml exists, expects a pass for good-pod and a fail for bad-pod, and that kyverno test exits with code 0"
+      type: "file"
+      source: "validation/validate-completed.sh"
+
+teardown:
+  keepCluster: false

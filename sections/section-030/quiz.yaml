@@ -340,3 +340,69 @@ questions:
   explanation: A bare counter keeps its value after the failures stop, so the alert
     never clears. Wrapping it in `increase()` makes it follow recent growth, and `for:`
     filters out a single noisy sample.
+- id: ats012-030-q15
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Check that Prometheus scrapes Kyverno"
+  source_readings:
+  - sections/section-030/module-01/course-03-scraping-kyverno-with-prometheus.md
+  prompt: "Which Prometheus query shows whether a scrape target is reachable?"
+  options:
+  - id: a
+    text: "`up`"
+    explanation: "Correct."
+  - id: b
+    text: "`kyverno_info`"
+    explanation: "This reports build information, not reachability."
+  - id: c
+    text: "`absent(up)`"
+    explanation: "This returns a value only when the metric is missing."
+  - id: d
+    text: "`rate(up[5m])`"
+    explanation: "`up` is a gauge, not a counter."
+  correct_option: a
+  explanation: "Prometheus records `up` as 1 for a successful scrape and 0 for a failure, for every target."
+- id: ats012-030-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain what cardinality means"
+  source_readings:
+  - sections/section-030/module-02/course-04-cardinality-and-series-budget.md
+  prompt: "What does high cardinality mean for a metric?"
+  options:
+  - id: a
+    text: "The metric has many distinct label combinations, so it creates many time series."
+    explanation: "Correct."
+  - id: b
+    text: "The metric has a high value."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "The metric is scraped very often."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "The metric uses a histogram."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "Each unique combination of label values is one time series, and a large number of series costs memory and storage."
+- id: ats012-030-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Detect a metric that disappeared"
+  source_readings:
+  - sections/section-030/module-03/course-04-troubleshooting-a-missing-metrics-pipeline.md
+  prompt: "Which PromQL function returns a result only when a metric has no series?"
+  options:
+  - id: a
+    text: "`absent()`"
+    explanation: "Correct."
+  - id: b
+    text: "`rate()`"
+    explanation: "This computes a per-second increase."
+  - id: c
+    text: "`increase()`"
+    explanation: "This computes the increase over a window."
+  - id: d
+    text: "`histogram_quantile()`"
+    explanation: "This estimates a quantile from buckets."
+  correct_option: a
+  explanation: "`absent(metric)` returns 1 when no series match, which is the basis of a no-data alert."

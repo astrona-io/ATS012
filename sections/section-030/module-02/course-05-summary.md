@@ -8,6 +8,8 @@ The ConfigMap has three keys. `namespaces` (`include` and `exclude`) restricts w
 
 In practice the alerts worth having are few: rejected requests rising, admission latency high, controllers erroring. A slow cluster after a policy rollout is diagnosed from the admission latency quantile first, and a low value points away from Kyverno. Metrics tell you how many and how long; reports tell you which resource.
 
+The export mode is chosen with `--otelConfig`: `prometheus` serves a scrape endpoint and `grpc` pushes to an OpenTelemetry Collector set with `--otelCollector`. Each controller reads its own flags. Cardinality is the number of distinct series, and it grows by multiplication across labels and histogram buckets. Count series with PromQL, and reduce them by excluding namespaces, keeping labels disabled, using fewer buckets or switching a metric off.
+
 The key facts to remember are these:
 
 - Three keys: `namespaces`, `metricsExposure`, `bucketBoundaries`.

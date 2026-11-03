@@ -17,7 +17,9 @@ flowchart LR
 
 1. **[Part 1 — Reading Kyverno Metrics with PromQL](./course-01-reading-kyverno-metrics-with-promql.md)** — counters, `increase`, `rate`, `sum by`, and `histogram_quantile` for latency.
 2. **[Part 2 — Alert Rules That Matter](./course-02-alert-rules-that-matter.md)** — `ServiceMonitor` and `PrometheusRule`, the four alerts worth having and how to keep them quiet.
-3. **[Summary](./course-03-summary.md)** — the module on one page.
+3. **[Recording Rules and Dashboards](./course-03-recording-rules-and-dashboards.md)** — precomputing queries and building a small dashboard.
+4. **[Troubleshooting a Missing Metrics Pipeline](./course-04-troubleshooting-a-missing-metrics-pipeline.md)** — finding the failing level and alerting on missing data with `absent()`.
+5. **[Summary](./course-05-summary.md)** — the module on one page.
 
 ## Learning objectives
 
@@ -29,6 +31,8 @@ After this module you can:
 - Distinguish a `ServiceMonitor` from a `PrometheusRule`.
 - Write an alert with an expression, a `for:` duration, a severity label and an annotation.
 - Choose a small set of alerts that matter for a Kyverno installation.
+- Write a recording rule for failure rate and admission latency.
+- Troubleshoot a missing metrics pipeline level by level and alert on missing data with `absent()`.
 
 ## Before you start
 

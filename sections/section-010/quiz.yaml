@@ -346,3 +346,69 @@ questions:
   explanation: Policy Reporter consumes the report objects you can already read with
     kubectl and adds a dashboard, metrics and notification outputs. The meaning of
     `warn` and `skip` stays the same.
+- id: ats012-010-q15
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Pull one field from every result with kubectl"
+  source_readings:
+  - sections/section-010/module-01/course-03-querying-reports-with-kubectl.md
+  prompt: "You want a table with the policy, rule and result of every entry in one PolicyReport. Which kubectl feature fits?"
+  options:
+  - id: a
+    text: "`-o custom-columns` or a jsonpath expression over `results[*]`"
+    explanation: "Correct."
+  - id: b
+    text: "`kubectl describe`, because it prints a table of results."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "`kubectl top polr`, which reads result counts."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "`kubectl edit polr`, then read the YAML."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "Output formats such as custom-columns and jsonpath select fields from the `results` list without reading the whole object."
+- id: ats012-010-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain which policy setting turns off background scans"
+  source_readings:
+  - sections/section-010/module-02/course-04-policy-settings-that-shape-reports.md
+  prompt: "Which policy field decides whether Kyverno evaluates existing resources in background scans?"
+  options:
+  - id: a
+    text: "`spec.background`"
+    explanation: "Correct."
+  - id: b
+    text: "`spec.failurePolicy`"
+    explanation: "This field controls what the API server does when the webhook is unreachable."
+  - id: c
+    text: "`spec.webhookTimeoutSeconds`"
+    explanation: "This field sets a webhook timeout, not scanning."
+  - id: d
+    text: "`spec.schemaValidation`"
+    explanation: "This field controls schema validation of the policy."
+  correct_option: a
+  explanation: "`spec.background` controls background scanning. With `false`, only admission requests produce results."
+- id: ats012-010-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Order the steps of report triage"
+  source_readings:
+  - sections/section-010/module-03/course-03-a-triage-workflow.md
+  prompt: "Which order does a sound triage workflow follow?"
+  options:
+  - id: a
+    text: "Group findings, rank by severity, find the owner, decide to fix, exempt or change the policy, then re-check."
+    explanation: "Correct."
+  - id: b
+    text: "Delete the reports, wait for new ones and close the ticket."
+    explanation: "Deleting reports hides findings; Kyverno rebuilds them."
+  - id: c
+    text: "Change every policy to `Audit` and ignore the reports."
+    explanation: "This removes protection and does not triage anything."
+  - id: d
+    text: "Add a PolicyException for every failing resource first."
+    explanation: "Exceptions come after you decide that the finding is acceptable."
+  correct_option: a
+  explanation: "Triage groups and ranks findings, finds who owns each one, makes a decision for each and then checks the report again."

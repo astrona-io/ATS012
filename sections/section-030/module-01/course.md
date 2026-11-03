@@ -22,6 +22,9 @@ flowchart LR
 
 1. **[Part 1 — The Metrics Endpoint and Its Services](./course-01-metrics-endpoint-and-services.md)** — where metrics come from, the four Services, the flags that control exposure, and three ways to read the endpoint by hand.
 2. **[Part 2 — The Core Metric Families](./course-02-core-metric-families.md)** — the metrics worth knowing by name, their labels, the `_total` suffix surprise, and the PromQL that turns them into answers.
+3. **[Scraping Kyverno with Prometheus](./course-03-scraping-kyverno-with-prometheus.md)** — how Prometheus finds the four endpoints, ServiceMonitor, and checking targets with `up`.
+4. **[Labels on Kyverno Metrics](./course-04-labels-on-kyverno-metrics.md)** — every label on the results metric, its values, and queries that filter and group by them.
+5. **[Summary](./course-05-summary.md)** — the module on one page.
 
 ## Learning objectives
 
@@ -34,6 +37,8 @@ After this module you can:
 - Identify `kyverno_policy_results_total`, `kyverno_policy_rule_info_total`, `kyverno_admission_requests_total`, `kyverno_admission_review_duration_seconds`, `kyverno_policy_execution_duration_seconds` and `kyverno_policy_changes_total`, and say what question each answers.
 - Explain why the docs say `kyverno_policy_results` while the endpoint says `kyverno_policy_results_total`.
 - Write PromQL that answers "which rules are failing most" and "how much latency is Kyverno adding".
+- Describe how Prometheus discovers the Kyverno endpoints and confirm each target with the `up` metric.
+- Name the labels on `kyverno_policy_results_total` and write queries that filter and group by them.
 
 ## Before you start
 

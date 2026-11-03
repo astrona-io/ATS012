@@ -8,6 +8,8 @@ Kyverno records what it finds in two report kinds. The kind follows the scope of
 
 A report has a `scope` (the resource), a `results[]` list (one entry per rule per resource) and a `summary` (counts). Each result is exactly one of five values: `pass`, `fail`, `warn`, `error` or `skip`. `warn` appears only when the policy carries `policies.kyverno.io/scored: "false"`, so a gate written on `summary.fail` never sees advisory policies. `error` means the rule could not be evaluated. `skip` means the rule matched and was deliberately not applied, for example because of a failed precondition or a `PolicyException`; a rule that did not match leaves no entry at all.
 
+You can query reports with `kubectl` using printer columns, labels, custom columns, jsonpath filters and `kubectl explain`. For automation, `jq` can count results from `-o json` output, and a script can turn that count into an exit code. Such a gate sees only the result values you count, and it passes when no report exists yet. The Kyverno CLI can print a report for files on disk with `kyverno apply --policy-report`, which describes only those files.
+
 The key facts to remember are these:
 
 - Report kind follows the reported resource's scope.

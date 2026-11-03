@@ -14,4 +14,6 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Apply an `Audit` policy with `background: true` for both namespaces, then create a new Pod and compare how fast its report appears with the Deployment's.
 - Lower `--backgroundScanInterval` to `1m` and watch the old Deployment appear.
 - Add `[*/*,quiet-ns,*]` to `resourceFilters` and flip `--skipResourceFilters` to see when `quiet-ns` stops being reported.
+- List `admissionreports,backgroundscanreports -A` and check which ClusterRoles carry `rbac.kyverno.io/aggregate-to-reports-controller`.
+- Compare `spec.background: false` with the default on a pre-existing Deployment.
 - List `ephemeralreports -A` while you create Pods, to catch the staging objects.

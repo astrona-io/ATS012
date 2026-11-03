@@ -14,4 +14,5 @@ This is a **playground**, not a lab. It starts a fresh `kind` cluster with Kyver
 - Confirm that `require-team-label` failures arrive as `warn`, not `fail`.
 - Run `kubectl get cpolr -o wide` and find the finding for `finance`.
 - Add the label `owner=ops` to `finance` and watch the `ClusterPolicyReport` entry change.
+- Build a custom-columns table of `summary.fail` per resource, and a `jq` count of failing results.
 - Delete `violator-pod` and check that its report disappears.

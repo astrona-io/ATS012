@@ -17,7 +17,7 @@ training:
   description: >
     Training material covering the Kyverno Certified Associate (KCA)
     Policy Management domain: policy reports, policy exceptions and
-    Kyverno metrics. Each module pairs a layered reader with an ungraded
+    Kyverno metrics, plus testing policies with the Kyverno CLI. Each module pairs a layered reader with an ungraded
     hands-on playground and a graded lab. Each section closes with an
     integration capstone and a knowledge-check quiz, and the course ends
     with a final domain quiz.
@@ -34,6 +34,7 @@ training:
       - "Time-boxing exceptions and cleaning them up"
       - "Scraping and configuring Kyverno metrics and controlling cardinality"
       - "Querying metrics and writing alert rules"
+      - "Testing policies locally with kyverno apply and kyverno test"
 
 modules:
 
@@ -62,6 +63,14 @@ modules:
         path: sections/section-010/module-01/course-02-reading-results-and-result-types.md
 
       - type: reading
+        title: 'Module 1.3: Querying Reports with kubectl'
+        path: sections/section-010/module-01/course-03-querying-reports-with-kubectl.md
+
+      - type: reading
+        title: 'Module 1.4: Reports in Automation and the Kyverno CLI'
+        path: sections/section-010/module-01/course-04-reports-in-automation-and-the-cli.md
+
+      - type: reading
         title: Question
         path: sections/section-010/module-01/labs/lab-01/question.md
       - type: lab
@@ -81,7 +90,7 @@ modules:
             url: https://kyverno.io/docs/policy-reports/
       - type: reading
         title: Summary
-        path: sections/section-010/module-01/course-03-summary.md
+        path: sections/section-010/module-01/course-05-summary.md
 
       - type: reading
         title: 'Module 2: The Reports Pipeline & Its Tuning'
@@ -94,6 +103,14 @@ modules:
       - type: reading
         title: 'Module 2.2: Tuning and Troubleshooting Reports'
         path: sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
+
+      - type: reading
+        title: 'Module 2.3: Report Resources and Permissions'
+        path: sections/section-010/module-02/course-03-report-resources-and-permissions.md
+
+      - type: reading
+        title: 'Module 2.4: Policy Settings That Shape Reports'
+        path: sections/section-010/module-02/course-04-policy-settings-that-shape-reports.md
 
       - type: reading
         title: Question
@@ -114,7 +131,7 @@ modules:
             url: https://kyverno.io/docs/policy-reports/
       - type: reading
         title: Summary
-        path: sections/section-010/module-02/course-03-summary.md
+        path: sections/section-010/module-02/course-05-summary.md
 
       - type: reading
         title: 'Module 3: Triage With Severity, Category & the Report Lifecycle'
@@ -127,6 +144,14 @@ modules:
       - type: reading
         title: 'Module 3.2: Report Lifecycle and Tooling'
         path: sections/section-010/module-03/course-02-report-lifecycle-and-tooling.md
+
+      - type: reading
+        title: 'Module 3.3: A Triage Workflow'
+        path: sections/section-010/module-03/course-03-a-triage-workflow.md
+
+      - type: reading
+        title: 'Module 3.4: Policy Reporter and Other Report Consumers'
+        path: sections/section-010/module-03/course-04-policy-reporter-and-report-consumers.md
 
       - type: reading
         title: Question
@@ -148,7 +173,7 @@ modules:
             url: https://kyverno.io/docs/policy-reports/
       - type: reading
         title: Summary
-        path: sections/section-010/module-03/course-03-summary.md
+        path: sections/section-010/module-03/course-05-summary.md
 
       - type: reading
         title: Question
@@ -199,6 +224,14 @@ modules:
         path: sections/section-020/module-01/course-02-anatomy-of-a-policyexception.md
 
       - type: reading
+        title: 'Module 1.3: Matching Resources in an Exception'
+        path: sections/section-020/module-01/course-03-matching-resources-in-an-exception.md
+
+      - type: reading
+        title: 'Module 1.4: Enabling with Helm and Troubleshooting'
+        path: sections/section-020/module-01/course-04-enabling-with-helm-and-troubleshooting.md
+
+      - type: reading
         title: Question
         path: sections/section-020/module-01/labs/lab-01/question.md
       - type: lab
@@ -217,7 +250,7 @@ modules:
             url: https://kyverno.io/docs/policies/exceptions/
       - type: reading
         title: Summary
-        path: sections/section-020/module-01/course-03-summary.md
+        path: sections/section-020/module-01/course-05-summary.md
 
       - type: reading
         title: 'Module 2: Narrowing, Governing & Auditing Exceptions'
@@ -230,6 +263,14 @@ modules:
       - type: reading
         title: 'Module 2.2: Governance, Alternatives & Auditing'
         path: sections/section-020/module-02/course-02-governance-and-alternatives.md
+
+      - type: reading
+        title: 'Module 2.3: Pod Security Exceptions in Detail'
+        path: sections/section-020/module-02/course-03-podsecurity-exceptions-in-detail.md
+
+      - type: reading
+        title: 'Module 2.4: Reviewing Exceptions at Scale'
+        path: sections/section-020/module-02/course-04-reviewing-exceptions-at-scale.md
 
       - type: reading
         title: Question
@@ -250,7 +291,7 @@ modules:
             url: https://kyverno.io/docs/policies/exceptions/
       - type: reading
         title: Summary
-        path: sections/section-020/module-02/course-03-summary.md
+        path: sections/section-020/module-02/course-05-summary.md
 
       - type: reading
         title: 'Module 3: Time-Boxed Exceptions & Cleanup'
@@ -263,6 +304,14 @@ modules:
       - type: reading
         title: 'Module 3.2: Enforcing and Reviewing Time-Boxed Exceptions'
         path: sections/section-020/module-03/course-02-enforcing-and-reviewing-time-boxed-exceptions.md
+
+      - type: reading
+        title: 'Module 3.3: How the Cleanup Controller Works'
+        path: sections/section-020/module-03/course-03-how-the-cleanup-controller-works.md
+
+      - type: reading
+        title: 'Module 3.4: Cleanup Policies as a Safety Net'
+        path: sections/section-020/module-03/course-04-cleanup-policies-as-a-safety-net.md
 
       - type: reading
         title: Question
@@ -284,7 +333,7 @@ modules:
             url: https://kyverno.io/docs/policy-types/cleanup-policy/
       - type: reading
         title: Summary
-        path: sections/section-020/module-03/course-03-summary.md
+        path: sections/section-020/module-03/course-05-summary.md
 
       - type: reading
         title: Question
@@ -332,6 +381,14 @@ modules:
         path: sections/section-030/module-01/course-02-core-metric-families.md
 
       - type: reading
+        title: 'Module 1.3: Scraping Kyverno with Prometheus'
+        path: sections/section-030/module-01/course-03-scraping-kyverno-with-prometheus.md
+
+      - type: reading
+        title: 'Module 1.4: Labels on Kyverno Metrics'
+        path: sections/section-030/module-01/course-04-labels-on-kyverno-metrics.md
+
+      - type: reading
         title: Question
         path: sections/section-030/module-01/labs/lab-01/question.md
       - type: lab
@@ -350,7 +407,7 @@ modules:
             url: https://kyverno.io/docs/monitoring/
       - type: reading
         title: Summary
-        path: sections/section-030/module-01/course-03-summary.md
+        path: sections/section-030/module-01/course-05-summary.md
 
       - type: reading
         title: 'Module 2: Configuring Metrics & Controlling Cardinality'
@@ -363,6 +420,14 @@ modules:
       - type: reading
         title: 'Module 2.2: Using Metrics in Practice'
         path: sections/section-030/module-02/course-02-using-metrics-in-practice.md
+
+      - type: reading
+        title: 'Module 2.3: Exporting Metrics with OpenTelemetry'
+        path: sections/section-030/module-02/course-03-exporting-metrics-with-opentelemetry.md
+
+      - type: reading
+        title: 'Module 2.4: Cardinality and the Series Budget'
+        path: sections/section-030/module-02/course-04-cardinality-and-series-budget.md
 
       - type: reading
         title: Question
@@ -384,7 +449,7 @@ modules:
             url: https://kyverno.io/docs/monitoring/
       - type: reading
         title: Summary
-        path: sections/section-030/module-02/course-03-summary.md
+        path: sections/section-030/module-02/course-05-summary.md
 
       - type: reading
         title: 'Module 3: Querying Metrics & Writing Alert Rules'
@@ -397,6 +462,14 @@ modules:
       - type: reading
         title: 'Module 3.2: Alert Rules That Matter'
         path: sections/section-030/module-03/course-02-alert-rules-that-matter.md
+
+      - type: reading
+        title: 'Module 3.3: Recording Rules and Dashboards'
+        path: sections/section-030/module-03/course-03-recording-rules-and-dashboards.md
+
+      - type: reading
+        title: 'Module 3.4: Troubleshooting a Missing Metrics Pipeline'
+        path: sections/section-030/module-03/course-04-troubleshooting-a-missing-metrics-pipeline.md
 
       - type: reading
         title: Question
@@ -420,7 +493,7 @@ modules:
             url: https://kyverno.io/docs/monitoring/
       - type: reading
         title: Summary
-        path: sections/section-030/module-03/course-03-summary.md
+        path: sections/section-030/module-03/course-05-summary.md
 
       - type: reading
         title: Question
@@ -444,9 +517,84 @@ modules:
         pass_score: 70
 
   - id: module-040
+    title: 'Section 040: Policy Testing with the Kyverno CLI'
+    description: >
+      Test policies before they reach a cluster with kyverno apply and
+      kyverno test: write expected results, test mutate and generate rules,
+      supply variables, and run the tests in a pipeline.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: 'Module 1: Testing Policies with the Kyverno CLI'
+        path: sections/section-040/module-01/course.md
+
+      - type: reading
+        title: 'Module 1.1: Running a Policy with kyverno apply'
+        path: sections/section-040/module-01/course-01-running-a-policy-with-kyverno-apply.md
+
+      - type: reading
+        title: 'Module 1.2: Writing kyverno-test.yaml'
+        path: sections/section-040/module-01/course-02-writing-kyverno-test-yaml.md
+
+      - type: reading
+        title: 'Module 1.3: Variables, Mutate and Generate Tests'
+        path: sections/section-040/module-01/course-03-variables-mutate-and-generate-tests.md
+
+      - type: reading
+        title: 'Module 1.4: Running Tests in CI'
+        path: sections/section-040/module-01/course-04-running-tests-in-ci.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: Write a Policy Test Lab
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: cli
+        task_kind: build
+        tags: [kyverno-cli, kyverno-test, validate]
+        learning_goals:
+          - Run a policy against resource files with kyverno apply
+          - Write a kyverno-test.yaml with a pass and a fail expectation
+        resources:
+          - name: Kyverno CLI
+            url: https://kyverno.io/docs/kyverno-cli/
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-05-summary.md
+
+      - type: reading
+        title: Section Capstone Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: Policy Testing Capstone
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: cli
+        task_kind: build
+        tags: [kyverno-cli, mutate, patchedResource, ci]
+        learning_goals:
+          - Test a validate rule and a mutate rule together
+          - Write a runner that fails the pipeline when a policy is wrong
+        resources:
+          - name: Kyverno CLI
+            url: https://kyverno.io/docs/kyverno-cli/
+      - type: quiz
+        title: 'Section 040 Knowledge Check: Policy Testing'
+        path: sections/section-040/quiz.yaml
+        pass_score: 70
+
+  - id: module-050
     title: "KCA Policy Management Domain Certification Quiz"
     description: >
-      A comprehensive, scenario-based final assessment covering all three
+      A comprehensive, scenario-based final assessment covering all four
       sections of the Policy Management domain, simulating actual KCA exam
       pressure.
 

@@ -18,7 +18,9 @@ flowchart LR
 
 1. **[Part 1 — Why Exceptions Need an End Date](./course-01-why-exceptions-need-an-end-date.md)** — the decay problem, the `cleanup.kyverno.io/ttl` label and the RBAC the cleanup controller needs.
 2. **[Part 2 — Enforcing and Reviewing Time-Boxed Exceptions](./course-02-enforcing-and-reviewing-time-boxed-exceptions.md)** — a policy that requires the label, a renewal process and what an expiry looks like in the reports.
-3. **[Summary](./course-03-summary.md)** — the module on one page.
+3. **[Part 3 — How the Cleanup Controller Works](./course-03-how-the-cleanup-controller-works.md)** — what it watches, how the ttl is read, timing, and how to check its permission and log.
+4. **[Part 4 — Cleanup Policies as a Safety Net](./course-04-cleanup-policies-as-a-safety-net.md)** — a `ClusterCleanupPolicy` that deletes exceptions older than a maximum age.
+5. **[Summary](./course-05-summary.md)** — the module on one page.
 
 ## Learning objectives
 
@@ -30,6 +32,8 @@ After this module you can:
 - Write a policy that rejects any `PolicyException` without a ttl.
 - Describe a renewal process that does not depend on someone's memory.
 - Say what happens to a workload's report result when its exception expires.
+- Check the cleanup controller's permission with `kubectl auth can-i` and read its log.
+- Write a `ClusterCleanupPolicy` that deletes exceptions older than a maximum age.
 
 ## Before you start
 

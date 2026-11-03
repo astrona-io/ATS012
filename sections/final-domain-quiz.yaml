@@ -1,4 +1,4 @@
-# Final domain knowledge check across all three sections.
+# Final domain knowledge check across all four sections.
 schema_version: 1
 kind: question_bank
 id: ats012-final
@@ -572,3 +572,377 @@ questions:
   explanation: The function interpolates over the `_bucket` series and needs `le`,
     so the aggregation must be `sum by (le)`. The result is no more precise than the
     configured bucket boundaries.
+- id: ats012-final-q25
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Pull one field from every result with kubectl"
+  source_readings:
+  - sections/section-010/module-01/course-03-querying-reports-with-kubectl.md
+  prompt: "You want a table with the policy, rule and result of every entry in one PolicyReport. Which kubectl feature fits?"
+  options:
+  - id: a
+    text: "`-o custom-columns` or a jsonpath expression over `results[*]`"
+    explanation: "Correct."
+  - id: b
+    text: "`kubectl describe`, because it prints a table of results."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "`kubectl top polr`, which reads result counts."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "`kubectl edit polr`, then read the YAML."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "Output formats such as custom-columns and jsonpath select fields from the `results` list without reading the whole object."
+- id: ats012-final-q26
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain which policy setting turns off background scans"
+  source_readings:
+  - sections/section-010/module-02/course-04-policy-settings-that-shape-reports.md
+  prompt: "Which policy field decides whether Kyverno evaluates existing resources in background scans?"
+  options:
+  - id: a
+    text: "`spec.background`"
+    explanation: "Correct."
+  - id: b
+    text: "`spec.failurePolicy`"
+    explanation: "This field controls what the API server does when the webhook is unreachable."
+  - id: c
+    text: "`spec.webhookTimeoutSeconds`"
+    explanation: "This field sets a webhook timeout, not scanning."
+  - id: d
+    text: "`spec.schemaValidation`"
+    explanation: "This field controls schema validation of the policy."
+  correct_option: a
+  explanation: "`spec.background` controls background scanning. With `false`, only admission requests produce results."
+- id: ats012-final-q27
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Order the steps of report triage"
+  source_readings:
+  - sections/section-010/module-03/course-03-a-triage-workflow.md
+  prompt: "Which order does a sound triage workflow follow?"
+  options:
+  - id: a
+    text: "Group findings, rank by severity, find the owner, decide to fix, exempt or change the policy, then re-check."
+    explanation: "Correct."
+  - id: b
+    text: "Delete the reports, wait for new ones and close the ticket."
+    explanation: "Deleting reports hides findings; Kyverno rebuilds them."
+  - id: c
+    text: "Change every policy to `Audit` and ignore the reports."
+    explanation: "This removes protection and does not triage anything."
+  - id: d
+    text: "Add a PolicyException for every failing resource first."
+    explanation: "Exceptions come after you decide that the finding is acceptable."
+  correct_option: a
+  explanation: "Triage groups and ranks findings, finds who owns each one, makes a decision for each and then checks the report again."
+- id: ats012-final-q28
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Choose the match fields of a PolicyException"
+  source_readings:
+  - sections/section-020/module-01/course-03-matching-resources-in-an-exception.md
+  prompt: "Which statement about the `match` block of a PolicyException is correct?"
+  options:
+  - id: a
+    text: "It selects the resources the exception applies to, and the exception only affects policy rules it lists in `exceptions`."
+    explanation: "Correct."
+  - id: b
+    text: "It selects the policies to delete."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "It must use the same name as the policy."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "It applies to every resource in the cluster."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "The exception lists the policy and rule names it waives and uses `match` to select which resources get the waiver."
+- id: ats012-final-q29
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Review exceptions across namespaces"
+  source_readings:
+  - sections/section-020/module-02/course-04-reviewing-exceptions-at-scale.md
+  prompt: "Which command lists every PolicyException in the cluster?"
+  options:
+  - id: a
+    text: "`kubectl get policyexceptions -A`"
+    explanation: "Correct."
+  - id: b
+    text: "`kubectl get polr -A`"
+    explanation: "This lists PolicyReports."
+  - id: c
+    text: "`kubectl get cpol`"
+    explanation: "This lists ClusterPolicies."
+  - id: d
+    text: "`kubectl get exceptions`"
+    explanation: "This is not a resource name Kyverno registers."
+  correct_option: a
+  explanation: "PolicyException is namespaced, so `-A` lists all of them. `polex` is the short name."
+- id: ats012-final-q30
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Name the Kyverno object that deletes expired resources"
+  source_readings:
+  - sections/section-020/module-03/course-04-cleanup-policies-as-a-safety-net.md
+  prompt: "Which Kyverno resource deletes matching resources on a schedule?"
+  options:
+  - id: a
+    text: "`ClusterCleanupPolicy` or `CleanupPolicy`"
+    explanation: "Correct."
+  - id: b
+    text: "`ClusterPolicy` with `validate`"
+    explanation: "A validate rule only allows or blocks requests."
+  - id: c
+    text: "`PolicyReport`"
+    explanation: "A report records results and deletes nothing."
+  - id: d
+    text: "`UpdateRequest`"
+    explanation: "This is an internal object for generate and mutate-existing work."
+  correct_option: a
+  explanation: "Cleanup policies run in the cleanup controller on a cron schedule and delete the resources they match."
+- id: ats012-final-q31
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Check that Prometheus scrapes Kyverno"
+  source_readings:
+  - sections/section-030/module-01/course-03-scraping-kyverno-with-prometheus.md
+  prompt: "Which Prometheus query shows whether a scrape target is reachable?"
+  options:
+  - id: a
+    text: "`up`"
+    explanation: "Correct."
+  - id: b
+    text: "`kyverno_info`"
+    explanation: "This reports build information, not reachability."
+  - id: c
+    text: "`absent(up)`"
+    explanation: "This returns a value only when the metric is missing."
+  - id: d
+    text: "`rate(up[5m])`"
+    explanation: "`up` is a gauge, not a counter."
+  correct_option: a
+  explanation: "Prometheus records `up` as 1 for a successful scrape and 0 for a failure, for every target."
+- id: ats012-final-q32
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain what cardinality means"
+  source_readings:
+  - sections/section-030/module-02/course-04-cardinality-and-series-budget.md
+  prompt: "What does high cardinality mean for a metric?"
+  options:
+  - id: a
+    text: "The metric has many distinct label combinations, so it creates many time series."
+    explanation: "Correct."
+  - id: b
+    text: "The metric has a high value."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "The metric is scraped very often."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "The metric uses a histogram."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "Each unique combination of label values is one time series, and a large number of series costs memory and storage."
+- id: ats012-final-q33
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Detect a metric that disappeared"
+  source_readings:
+  - sections/section-030/module-03/course-04-troubleshooting-a-missing-metrics-pipeline.md
+  prompt: "Which PromQL function returns a result only when a metric has no series?"
+  options:
+  - id: a
+    text: "`absent()`"
+    explanation: "Correct."
+  - id: b
+    text: "`rate()`"
+    explanation: "This computes a per-second increase."
+  - id: c
+    text: "`increase()`"
+    explanation: "This computes the increase over a window."
+  - id: d
+    text: "`histogram_quantile()`"
+    explanation: "This estimates a quantile from buckets."
+  correct_option: a
+  explanation: "`absent(metric)` returns 1 when no series match, which is the basis of a no-data alert."
+- id: ats012-final-q34
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Say what kyverno apply does"
+  source_readings:
+  - sections/section-040/module-01/course-01-running-a-policy-with-kyverno-apply.md
+  prompt: "What does `kyverno apply policy.yaml --resource pods.yaml` do?"
+  options:
+  - id: a
+    text: "It evaluates the policy against the files and prints results, without changing a cluster."
+    explanation: "Correct."
+  - id: b
+    text: "It installs the policy in the current cluster."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "It deletes resources that fail."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "It creates a PolicyReport in the cluster."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "`kyverno apply` evaluates locally. Use `--cluster` to read live resources, and it still does not change them."
+- id: ats012-final-q35
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the test file and its kind"
+  source_readings:
+  - sections/section-040/module-01/course-02-writing-kyverno-test-yaml.md
+  prompt: "Which file name and kind does `kyverno test` look for by default?"
+  options:
+  - id: a
+    text: "`kyverno-test.yaml` with `kind: Test`"
+    explanation: "Correct."
+  - id: b
+    text: "`policy-test.yaml` with `kind: PolicyTest`"
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "`kyverno.yaml` with `kind: ClusterPolicy`"
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "`test.json` with `kind: Report`"
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "By default `kyverno test` searches for files named `kyverno-test.yaml`; `--file-name` changes the name."
+- id: ats012-final-q36
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Predict the test result for an unexpected outcome"
+  source_readings:
+  - sections/section-040/module-01/course-02-writing-kyverno-test-yaml.md
+  prompt: "A policy produces a result for a resource, but `results` has no expectation for it. What does the test report?"
+  options:
+  - id: a
+    text: "A failure for the unexpected outcome."
+    explanation: "Correct."
+  - id: b
+    text: "Nothing; unlisted results are ignored."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "A pass, because the policy ran."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "A warning only."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "A test is a complete statement of what the policy does to the sample resources, so unlisted outcomes fail it."
+- id: ats012-final-q37
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Name the rule of an autogenerated rule"
+  source_readings:
+  - sections/section-040/module-01/course-02-writing-kyverno-test-yaml.md
+  prompt: "A rule named `check-limits` is autogenerated for Deployments. What name does the expectation use for a Deployment resource?"
+  options:
+  - id: a
+    text: "`autogen-check-limits`"
+    explanation: "Correct."
+  - id: b
+    text: "`check-limits-deployment`"
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "`deployment-check-limits`"
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "`check-limits`"
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "Autogenerated rules for Pod controllers carry the `autogen-` prefix."
+- id: ats012-final-q38
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Test a mutate rule"
+  source_readings:
+  - sections/section-040/module-01/course-03-variables-mutate-and-generate-tests.md
+  prompt: "Which field lets a test compare a mutate rule's output with an expected resource?"
+  options:
+  - id: a
+    text: "`patchedResource`"
+    explanation: "Correct."
+  - id: b
+    text: "`generatedResource`"
+    explanation: "This is for generate rules."
+  - id: c
+    text: "`mutatedFile`"
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "`expectedPatch`"
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "`patchedResource` names the file with the resource as it should look after mutation."
+- id: ats012-final-q39
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Test a generate rule"
+  source_readings:
+  - sections/section-040/module-01/course-03-variables-mutate-and-generate-tests.md
+  prompt: "Which field names the file with the resource a generate rule should create?"
+  options:
+  - id: a
+    text: "`generatedResource`"
+    explanation: "Correct."
+  - id: b
+    text: "`patchedResource`"
+    explanation: "This is for mutate rules."
+  - id: c
+    text: "`createdResource`"
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "`downstream`"
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "`generatedResource` holds the expected generated resource."
+- id: ats012-final-q40
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Supply variables to a test"
+  source_readings:
+  - sections/section-040/module-01/course-03-variables-mutate-and-generate-tests.md
+  prompt: "A rule reads a variable that is not in the resource. How do you give the CLI a value?"
+  options:
+  - id: a
+    text: "With a `Values` file passed as `--values-file` or `values:` in the Test."
+    explanation: "Correct."
+  - id: b
+    text: "Edit the policy to remove the variable."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "Set an environment variable named after it."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "The CLI looks it up in the cluster automatically."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "A `Values` file (or `--set` for a single value) provides the data that a request would carry."
+- id: ats012-final-q41
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Use the exit code in a pipeline"
+  source_readings:
+  - sections/section-040/module-01/course-04-running-tests-in-ci.md
+  prompt: "What does `kyverno test` return when an expectation fails?"
+  options:
+  - id: a
+    text: "A non-zero exit code."
+    explanation: "Correct."
+  - id: b
+    text: "Exit code 0, with a message."
+    explanation: "This option does not match what Kyverno does."
+  - id: c
+    text: "It deletes the failing resource."
+    explanation: "This option does not match what Kyverno does."
+  - id: d
+    text: "Nothing; it only prints a table."
+    explanation: "This option does not match what Kyverno does."
+  correct_option: a
+  explanation: "The non-zero exit code makes a CI step fail without extra parsing."

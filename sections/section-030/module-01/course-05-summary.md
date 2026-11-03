@@ -6,6 +6,8 @@ Every Kyverno controller serves Prometheus text on port 8000 at `/metrics`. Know
 
 Four metrics Services front the four controllers: the admission controller's is `kyverno-svc-metrics`, and the others follow the controller name. The flags `--disableMetrics`, `--metricsPort` and `--otelConfig` control whether and how metrics are exposed. The six families to know are `kyverno_policy_results_total` (outcomes per policy and rule), `kyverno_policy_rule_info_total` (a gauge, value 1 per rule that exists), `kyverno_admission_requests_total`, `kyverno_admission_review_duration_seconds`, `kyverno_policy_execution_duration_seconds` and `kyverno_policy_changes_total`. The docs name counters without `_total`; the exporter adds it, and PromQL must use the exported name. `rule_execution_cause` separates admission traffic from background scans.
 
+Prometheus pulls from the four endpoints, and a ServiceMonitor, when the Prometheus Operator is installed, selects them; the `up` metric proves each scrape works. The labels on `kyverno_policy_results_total` (policy name, validation mode, rule type, rule result and execution cause) let you filter and group, and a wrong label name returns an empty result rather than an error.
+
 The key facts to remember are these:
 
 - Port 8000, path `/metrics`, one Service per controller.
