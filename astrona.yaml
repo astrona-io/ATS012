@@ -1,24 +1,48 @@
+# Course manifest for ATS012 - KCA: Policy Management (Kyverno Certified Associate).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), the lab's question.md reading and the `type: lab` entry,
+# then the module's summary. The section capstone closes the section,
+# followed by the section quiz. Playgrounds are not listed: the landing
+# page's playground marker shows them. solution.md is never listed.
+#
+# All labs are UNTESTED: built and checked statically only.
+#
+# Every `path:` is relative to this file.
+
 training:
   id: ATS012
   title: "KCA: Policy Management"
   description: >
     Training material covering the Kyverno Certified Associate (KCA)
-    Policy Management domain — policy reports, policy exceptions and
-    Kyverno metrics — with hands-on labs for each competency.
+    Policy Management domain: policy reports, policy exceptions and
+    Kyverno metrics. Each module pairs a layered reader with an ungraded
+    hands-on playground and a graded lab. Each section closes with an
+    integration capstone and a knowledge-check quiz, and the course ends
+    with a final domain quiz.
 
   certification:
     name: Kyverno Certified Associate
     code: KCA
     provider: CNCF / Linux Foundation
     domain: Policy Management
+    competencies:
+      - "Reading PolicyReports and ClusterPolicyReports, and operating the reports pipeline"
+      - "Using severity, category and the report lifecycle to triage findings"
+      - "Enabling, writing, narrowing and governing PolicyExceptions"
+      - "Time-boxing exceptions and cleaning them up"
+      - "Scraping and configuring Kyverno metrics and controlling cardinality"
+      - "Querying metrics and writing alert rules"
 
 modules:
+
   - id: module-010
-    title: "Section 010: Policy Reports"
+    title: 'Section 010: Policy Reports'
     description: >
       Read PolicyReport and ClusterPolicyReport objects, interpret the five
-      result types, and operate the reporting pipeline that produces them —
-      the admission path, the background scan, and the flags that tune both.
+      result types, operate the reporting pipeline that produces them, and
+      use severity, category and the report lifecycle to triage findings.
 
     content:
       - type: reading
@@ -26,78 +50,136 @@ modules:
         path: sections/section-010/README.md
 
       - type: reading
-        title: "Module 1: Reading PolicyReports"
+        title: 'Module 1: Reading PolicyReports'
         path: sections/section-010/module-01/course.md
 
       - type: reading
-        title: "Module 1.1: PolicyReport and ClusterPolicyReport"
+        title: 'Module 1.1: PolicyReport and ClusterPolicyReport'
         path: sections/section-010/module-01/course-01-policyreport-and-clusterpolicyreport.md
 
       - type: reading
-        title: "Module 1.2: Reading Results — the Five Result Types"
+        title: 'Module 1.2: Reading Results: the Five Result Types'
         path: sections/section-010/module-01/course-02-reading-results-and-result-types.md
 
       - type: reading
         title: Question
         path: sections/section-010/module-01/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-010/module-01/labs/lab-01/solution.md
-
       - type: lab
-        title: "Reading PolicyReports Lab"
+        title: Reading PolicyReports Lab
         path: sections/section-010/module-01/labs/lab-01
-        difficulty: intermediate
+        difficulty: beginner
+        estimated_duration: 20m
+        topic: reports
+        task_kind: explore
+        tags: [policyreport, clusterpolicyreport, audit, warn, jsonpath]
+        learning_goals:
+          - Find the PolicyReport a policy produced for a namespace
+          - Separate fail results from pass results and from advisory warn results
+          - Query a report with kubectl and jsonpath
+        resources:
+          - name: Kyverno policy reports
+            url: https://kyverno.io/docs/policy-reports/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-03-summary.md
 
       - type: reading
-        title: "Module 2: The Reports Pipeline & Its Tuning"
+        title: 'Module 2: The Reports Pipeline & Its Tuning'
         path: sections/section-010/module-02/course.md
 
       - type: reading
-        title: "Module 2.1: The Reports Pipeline"
+        title: 'Module 2.1: The Reports Pipeline'
         path: sections/section-010/module-02/course-01-the-reports-pipeline.md
 
       - type: reading
-        title: "Module 2.2: Tuning and Troubleshooting Reports"
+        title: 'Module 2.2: Tuning and Troubleshooting Reports'
         path: sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
 
       - type: reading
         title: Question
         path: sections/section-010/module-02/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-010/module-02/labs/lab-01/solution.md
-
       - type: lab
-        title: "Reports Pipeline Tuning Lab"
+        title: Reports Pipeline Tuning Lab
         path: sections/section-010/module-02/labs/lab-01
         difficulty: intermediate
+        estimated_duration: 25m
+        topic: reports
+        task_kind: troubleshoot
+        tags: [reports-controller, background-scan, ephemeralreport, scan-interval]
+        learning_goals:
+          - Lower the background scan interval so existing resources are scanned
+          - Produce a finding through the admission path and another through the background path
+        resources:
+          - name: Kyverno policy reports
+            url: https://kyverno.io/docs/policy-reports/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-02/course-03-summary.md
 
       - type: reading
-        title: "Section 010 Knowledge Check: Policy Reports"
-        path: sections/section-010/quiz.md
+        title: 'Module 3: Triage With Severity, Category & the Report Lifecycle'
+        path: sections/section-010/module-03/course.md
+
+      - type: reading
+        title: 'Module 3.1: Severity and Category in Results'
+        path: sections/section-010/module-03/course-01-severity-and-category-in-results.md
+
+      - type: reading
+        title: 'Module 3.2: Report Lifecycle and Tooling'
+        path: sections/section-010/module-03/course-02-report-lifecycle-and-tooling.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/module-03/labs/lab-01/question.md
+      - type: lab
+        title: Report Triage Lab
+        path: sections/section-010/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: reports
+        task_kind: build
+        tags: [severity, category, policyreport, lifecycle, triage]
+        learning_goals:
+          - Annotate policies with severity and category and see both in report results
+          - Show that deleting a resource removes its report
+          - Count findings by severity from live reports
+        resources:
+          - name: Kyverno policy reports
+            url: https://kyverno.io/docs/policy-reports/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-03/course-03-summary.md
 
       - type: reading
         title: Question
         path: sections/section-010/capstone/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-010/capstone/labs/lab-01/solution.md
-
       - type: lab
-        title: "Policy Reports Capstone Lab"
+        title: Policy Reports Capstone Lab
         path: sections/section-010/capstone/labs/lab-01
         difficulty: advanced
+        estimated_duration: 40m
+        topic: reports
+        task_kind: build
+        tags: [policyreport, scored, warn, scan-interval]
+        learning_goals:
+          - Run a scored and an advisory policy over two namespaces
+          - Tune the reports controller so existing workloads are scanned
+          - Produce fail, warn and pass in the right places
+        resources:
+          - name: Kyverno policy reports
+            url: https://kyverno.io/docs/policy-reports/
+      - type: quiz
+        title: 'Section 010 Knowledge Check: Policy Reports'
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
 
   - id: module-020
-    title: "Section 020: PolicyExceptions"
+    title: 'Section 020: PolicyExceptions'
     description: >
       Enable and scope the PolicyException feature, write exceptions that
-      waive exactly the rules they should — including autogen rules — narrow
-      them with conditions and podSecurity, and govern and audit them.
+      waive exactly the rules they should including autogen rules, narrow
+      them with conditions and podSecurity, govern and audit them, and
+      time-box them with the cleanup controller.
 
     content:
       - type: reading
@@ -105,78 +187,132 @@ modules:
         path: sections/section-020/README.md
 
       - type: reading
-        title: "Module 1: Enabling & Writing a PolicyException"
+        title: 'Module 1: Enabling & Writing a PolicyException'
         path: sections/section-020/module-01/course.md
 
       - type: reading
-        title: "Module 1.1: Enabling PolicyExceptions"
+        title: 'Module 1.1: Enabling PolicyExceptions'
         path: sections/section-020/module-01/course-01-enabling-policyexceptions.md
 
       - type: reading
-        title: "Module 1.2: The Anatomy of a PolicyException"
+        title: 'Module 1.2: The Anatomy of a PolicyException'
         path: sections/section-020/module-01/course-02-anatomy-of-a-policyexception.md
 
       - type: reading
         title: Question
         path: sections/section-020/module-01/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-020/module-01/labs/lab-01/solution.md
-
       - type: lab
-        title: "PolicyException Lab"
+        title: PolicyException Lab
         path: sections/section-020/module-01/labs/lab-01
         difficulty: intermediate
+        estimated_duration: 25m
+        topic: exceptions
+        task_kind: build
+        tags: [policyexception, exceptionnamespace, autogen, ruleNames]
+        learning_goals:
+          - Enable the PolicyException feature for one namespace
+          - Write an exception that waives a rule and its autogen counterpart
+        resources:
+          - name: Kyverno policy exceptions
+            url: https://kyverno.io/docs/policies/exceptions/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-03-summary.md
 
       - type: reading
-        title: "Module 2: Narrowing, Governing & Auditing Exceptions"
+        title: 'Module 2: Narrowing, Governing & Auditing Exceptions'
         path: sections/section-020/module-02/course.md
 
       - type: reading
-        title: "Module 2.1: Narrowing an Exception — conditions, podSecurity & background"
+        title: 'Module 2.1: Narrowing an Exception: conditions, podSecurity & background'
         path: sections/section-020/module-02/course-01-conditions-podsecurity-and-background.md
 
       - type: reading
-        title: "Module 2.2: Governance, Alternatives & Auditing"
+        title: 'Module 2.2: Governance, Alternatives & Auditing'
         path: sections/section-020/module-02/course-02-governance-and-alternatives.md
 
       - type: reading
         title: Question
         path: sections/section-020/module-02/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-020/module-02/labs/lab-01/solution.md
-
       - type: lab
-        title: "Narrow & Governed Exceptions Lab"
+        title: Narrow & Governed Exceptions Lab
         path: sections/section-020/module-02/labs/lab-01
-        difficulty: intermediate
+        difficulty: advanced
+        estimated_duration: 30m
+        topic: exceptions
+        task_kind: build
+        tags: [policyexception, conditions, governance, audit]
+        learning_goals:
+          - Narrow an exception with conditions
+          - Require owner and expiry metadata on exceptions with a policy
+        resources:
+          - name: Kyverno policy exceptions
+            url: https://kyverno.io/docs/policies/exceptions/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-02/course-03-summary.md
 
       - type: reading
-        title: "Section 020 Knowledge Check: PolicyExceptions"
-        path: sections/section-020/quiz.md
+        title: 'Module 3: Time-Boxed Exceptions & Cleanup'
+        path: sections/section-020/module-03/course.md
+
+      - type: reading
+        title: 'Module 3.1: Why Exceptions Need an End Date'
+        path: sections/section-020/module-03/course-01-why-exceptions-need-an-end-date.md
+
+      - type: reading
+        title: 'Module 3.2: Enforcing and Reviewing Time-Boxed Exceptions'
+        path: sections/section-020/module-03/course-02-enforcing-and-reviewing-time-boxed-exceptions.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/module-03/labs/lab-01/question.md
+      - type: lab
+        title: Time-Boxed Exceptions Lab
+        path: sections/section-020/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: exceptions
+        task_kind: build
+        tags: [policyexception, cleanup, ttl, cleanup-controller, rbac, aggregated-clusterrole]
+        learning_goals:
+          - Grant the cleanup controller delete rights on PolicyExceptions
+          - Require a ttl label on every exception with a policy
+          - Create an exception that ends on its own
+        resources:
+          - name: Kyverno cleanup
+            url: https://kyverno.io/docs/policy-types/cleanup-policy/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-03/course-03-summary.md
 
       - type: reading
         title: Question
         path: sections/section-020/capstone/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-020/capstone/labs/lab-01/solution.md
-
       - type: lab
-        title: "PolicyExceptions Capstone Lab"
+        title: PolicyExceptions Capstone Lab
         path: sections/section-020/capstone/labs/lab-01
         difficulty: advanced
+        estimated_duration: 40m
+        topic: exceptions
+        task_kind: build
+        tags: [policyexception, conditions, governance]
+        learning_goals:
+          - Combine a narrow, governed exception with an auditable result
+        resources:
+          - name: Kyverno policy exceptions
+            url: https://kyverno.io/docs/policies/exceptions/
+      - type: quiz
+        title: 'Section 020 Knowledge Check: PolicyExceptions'
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
 
   - id: module-030
-    title: "Section 030: Kyverno Metrics"
+    title: 'Section 030: Kyverno Metrics'
     description: >
-      Scrape Kyverno's Prometheus endpoint, read the core metric families and
-      their labels, and configure measurement through the kyverno-metrics
-      ConfigMap — namespace selection, label cardinality and histogram buckets.
+      Scrape Kyverno's Prometheus endpoint, read the core metric families
+      and their labels, configure measurement through the kyverno-metrics
+      ConfigMap, and turn the numbers into queries and alert rules.
 
     content:
       - type: reading
@@ -184,71 +320,128 @@ modules:
         path: sections/section-030/README.md
 
       - type: reading
-        title: "Module 1: The Metrics Endpoint & Core Metric Families"
+        title: 'Module 1: The Metrics Endpoint & Core Metric Families'
         path: sections/section-030/module-01/course.md
 
       - type: reading
-        title: "Module 1.1: The Metrics Endpoint and Its Services"
+        title: 'Module 1.1: The Metrics Endpoint and Its Services'
         path: sections/section-030/module-01/course-01-metrics-endpoint-and-services.md
 
       - type: reading
-        title: "Module 1.2: The Core Metric Families"
+        title: 'Module 1.2: The Core Metric Families'
         path: sections/section-030/module-01/course-02-core-metric-families.md
 
       - type: reading
         title: Question
         path: sections/section-030/module-01/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-030/module-01/labs/lab-01/solution.md
-
       - type: lab
-        title: "Kyverno Metrics Endpoint Lab"
+        title: Kyverno Metrics Endpoint Lab
         path: sections/section-030/module-01/labs/lab-01
-        difficulty: intermediate
+        difficulty: beginner
+        estimated_duration: 20m
+        topic: metrics
+        task_kind: explore
+        tags: [metrics, prometheus, kyverno-svc-metrics, counters]
+        learning_goals:
+          - Scrape the metrics endpoint from inside the cluster
+          - Find the core metric families and read their labels
+        resources:
+          - name: Kyverno metrics
+            url: https://kyverno.io/docs/monitoring/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-03-summary.md
 
       - type: reading
-        title: "Module 2: Configuring Metrics & Controlling Cardinality"
+        title: 'Module 2: Configuring Metrics & Controlling Cardinality'
         path: sections/section-030/module-02/course.md
 
       - type: reading
-        title: "Module 2.1: The kyverno-metrics ConfigMap"
+        title: 'Module 2.1: The kyverno-metrics ConfigMap'
         path: sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
 
       - type: reading
-        title: "Module 2.2: Using Metrics in Practice"
+        title: 'Module 2.2: Using Metrics in Practice'
         path: sections/section-030/module-02/course-02-using-metrics-in-practice.md
 
       - type: reading
         title: Question
         path: sections/section-030/module-02/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-030/module-02/labs/lab-01/solution.md
-
       - type: lab
-        title: "Metrics Configuration Lab"
+        title: Metrics Configuration Lab
         path: sections/section-030/module-02/labs/lab-01
         difficulty: intermediate
+        estimated_duration: 25m
+        topic: metrics
+        task_kind: build
+        tags: [kyverno-metrics, cardinality, metricsExposure, bucketBoundaries]
+        learning_goals:
+          - Exclude a namespace from metrics
+          - Re-enable a label dimension for one metric
+          - Set custom histogram buckets
+        resources:
+          - name: Kyverno metrics
+            url: https://kyverno.io/docs/monitoring/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-02/course-03-summary.md
 
       - type: reading
-        title: "Section 030 Knowledge Check: Kyverno Metrics"
-        path: sections/section-030/quiz.md
+        title: 'Module 3: Querying Metrics & Writing Alert Rules'
+        path: sections/section-030/module-03/course.md
+
+      - type: reading
+        title: 'Module 3.1: Reading Kyverno Metrics with PromQL'
+        path: sections/section-030/module-03/course-01-reading-kyverno-metrics-with-promql.md
+
+      - type: reading
+        title: 'Module 3.2: Alert Rules That Matter'
+        path: sections/section-030/module-03/course-02-alert-rules-that-matter.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/module-03/labs/lab-01/question.md
+      - type: lab
+        title: Metrics Queries and Alert Rule Lab
+        path: sections/section-030/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: metrics
+        task_kind: build
+        tags: [promql, increase, rate, histogram_quantile, prometheusrule, alerting]
+        learning_goals:
+          - Read admission pass and fail counters for one policy
+          - Record findings that agree with the endpoint
+          - Write an alert on the failure counter
+        resources:
+          - name: PromQL querying basics
+            url: https://prometheus.io/docs/prometheus/latest/querying/basics/
+          - name: Kyverno metrics
+            url: https://kyverno.io/docs/monitoring/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-03/course-03-summary.md
 
       - type: reading
         title: Question
         path: sections/section-030/capstone/labs/lab-01/question.md
-
-      - type: reading
-        title: Solution Walkthrough
-        path: sections/section-030/capstone/labs/lab-01/solution.md
-
       - type: lab
-        title: "Kyverno Metrics Capstone Lab"
+        title: Kyverno Metrics Capstone Lab
         path: sections/section-030/capstone/labs/lab-01
         difficulty: advanced
+        estimated_duration: 40m
+        topic: metrics
+        task_kind: build
+        tags: [metrics, kyverno-metrics, cardinality]
+        learning_goals:
+          - Combine endpoint reading and metrics configuration in one scenario
+        resources:
+          - name: Kyverno metrics
+            url: https://kyverno.io/docs/monitoring/
+      - type: quiz
+        title: 'Section 030 Knowledge Check: Kyverno Metrics'
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
 
   - id: module-040
     title: "KCA Policy Management Domain Certification Quiz"
@@ -258,6 +451,7 @@ modules:
       pressure.
 
     content:
-      - type: reading
+      - type: quiz
         title: "Final Domain Certification Quiz"
-        path: sections/final-domain-quiz.md
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

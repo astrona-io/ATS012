@@ -34,3 +34,7 @@ After this module you can:
 ## Before you start
 
 You should already be comfortable applying a `ClusterPolicy` and know what `validationFailureAction: Audit` versus `Enforce` does at admission time. The linked lab gives you a kind cluster with Kyverno v1.13.2 pre-installed and a namespace that already contains both a compliant and a non-compliant workload, so there is something real for the reports to describe.
+
+Launch your playground now, and keep it running next to you while you read the parts:
+
+<!-- astrona:playground -->

@@ -1,0 +1,346 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats012-020
+course_id: ATS012
+exam_code: KCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: PolicyExceptions
+questions:
+- id: ats012-020-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Diagnose an exception that has no effect because the feature is off
+  source_readings:
+  - sections/section-020/module-01/course-01-enabling-policyexceptions.md
+  prompt: You create a `PolicyException` on a freshly installed Kyverno v1.13.2 cluster. `kubectl get policyexception` shows it, but the policy keeps blocking the workload. What is the most likely cause?
+  options:
+  - id: a
+    text: The exception needs several minutes to propagate to the webhook.
+    explanation: This option invents a propagation delay; once the feature is on, exceptions apply immediately.
+  - id: b
+    text: PolicyExceptions are disabled by default; `--enablePolicyException=true` must be set on the controllers, along with a matching `--exceptionNamespace`.
+    explanation: Correct. The CRD is installed by default but the feature is off. Without `--enablePolicyException=true`, the object is stored happily by the API server and has no effect whatsoever — no error, no event, no warning. `--exceptionNamespace` then restricts which namespace's exceptions are honoured.
+  - id: c
+    text: "`PolicyException` only works against namespaced `Policy` objects, never `ClusterPolicy`."
+    explanation: This option is wrong — exceptions work against both, with `<namespace>/<name>` used in `policyName` for a namespaced `Policy`.
+  - id: d
+    text: The exception must be created in the `kyverno` namespace.
+    explanation: This option is wrong — the exception must live in the namespace `--exceptionNamespace` names, which is a namespace you choose, not `kyverno` by default.
+  correct_option: b
+  explanation: The CRD is installed by default but the feature is off. Without `--enablePolicyException=true`, the object is stored happily by the API server and has no effect whatsoever — no error, no event, no warning. `--exceptionNamespace` then restricts which namespace's exceptions are honoured.
+- id: ats012-020-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Enable exceptions on every controller that evaluates policy
+  source_readings:
+  - sections/section-020/module-01/course-01-enabling-policyexceptions.md
+  prompt: You enable exceptions on `kyverno-admission-controller` only. Your exempted Deployment now deploys successfully, but your compliance dashboard still shows it failing. Why?
+  options:
+  - id: a
+    text: The dashboard is caching stale data.
+    explanation: This option is a guess that does not explain a reproducible mismatch.
+  - id: b
+    text: The reports controller also needs `--enablePolicyException=true`; without it, background scans do not honour the exception and keep recording `fail` instead of `skip`.
+    explanation: 'Correct. Three controllers carry the flag and each applies it to its own work: the admission controller decides whether the resource is admitted, the reports controller decides whether a background scan records `skip`, and the background controller applies it to `generate`/`mutateExisting` processing. Setting it on only one produces exactly this enforcement-versus-record mismatch.'
+  - id: c
+    text: Reports always record the pre-exception result for audit purposes.
+    explanation: This option invents a "record the original verdict" behaviour that does not exist.
+  - id: d
+    text: Exceptions never affect reports, by design.
+    explanation: 'This option is contradicted by `result: skip` and the `properties.exceptions` field.'
+  correct_option: b
+  explanation: 'Three controllers carry the flag and each applies it to its own work: the admission controller decides whether the resource is admitted, the reports controller decides whether a background scan records `skip`, and the background controller applies it to `generate`/`mutateExisting` processing. Setting it on only one produces exactly this enforcement-versus-record mismatch.'
+- id: ats012-020-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain the autogen trap when writing ruleNames
+  source_readings:
+  - sections/section-020/module-01/course-02-anatomy-of-a-policyexception.md
+  prompt: 'A `ClusterPolicy` has exactly one rule, named `check-limits`, matching `kinds: [Pod]`. A Deployment is being blocked by it. Your exception lists `ruleNames: [check-limits]` and matches `kinds: [Pod]`. Why does the Deployment stay blocked?'
+  options:
+  - id: a
+    text: Exceptions cannot exempt Deployments at all.
+    explanation: This option is wrong — exceptions match any kind the underlying rule reaches.
+  - id: b
+    text: 'Autogen generates a parallel `autogen-check-limits` rule for Pod-owning controllers, and it is that rule blocking the Deployment request — the exception must name it and match `kind: Deployment`.'
+    explanation: Correct. Kyverno's autogen mechanism silently adds `autogen-`-prefixed copies of a Pod-scoped rule for Deployment, StatefulSet, DaemonSet, Job, CronJob and ReplicaSet. The admission request being rejected is the `Deployment` request, evaluated by `autogen-check-limits`. An exception must therefore list both rule names and match the `Deployment` kind as well as `Pod`.
+  - id: c
+    text: "`ruleNames` requires a wildcard to work."
+    explanation: This option is wrong; a wildcard would work but only because it happens to cover the autogen name — naming both rules explicitly is the precise fix.
+  - id: d
+    text: The Deployment must be annotated to accept exceptions.
+    explanation: This option invents an opt-in annotation on the workload that Kyverno does not require.
+  correct_option: b
+  explanation: Kyverno's autogen mechanism silently adds `autogen-`-prefixed copies of a Pod-scoped rule for Deployment, StatefulSet, DaemonSet, Job, CronJob and ReplicaSet. The admission request being rejected is the `Deployment` request, evaluated by `autogen-check-limits`. An exception must therefore list both rule names and match the `Deployment` kind as well as `Pod`.
+- id: ats012-020-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Match the resources an exception must cover, including pods created by a Deployment
+  source_readings:
+  - sections/section-020/module-01/course-02-anatomy-of-a-policyexception.md
+  prompt: 'An exception matches `names: ["legacy-api"]` exactly. The Deployment is admitted, but its Pods still produce failing results. What went wrong?'
+  options:
+  - id: a
+    text: Pods are never covered by exceptions.
+    explanation: This option invents a restriction that does not exist — one exception can match several kinds, Pods included.
+  - id: b
+    text: The Pods are named `legacy-api-<replicaset-hash>-<pod-hash>`, which does not match the exact name; a prefix wildcard like `legacy-api*` is needed.
+    explanation: 'Correct. A Deployment''s Pods carry generated suffixes from the ReplicaSet, so an exact-name match covers the controller but none of the Pods it spawns. `names: ["legacy-api*"]` covers both.'
+  - id: c
+    text: Pod-level exemptions require a separate exception object.
+    explanation: This option invents a restriction that does not exist — the same exception object can match Pods.
+  - id: d
+    text: "`names` only accepts a single entry."
+    explanation: This option is wrong; `names` is a list.
+  correct_option: b
+  explanation: 'A Deployment''s Pods carry generated suffixes from the ReplicaSet, so an exact-name match covers the controller but none of the Pods it spawns. `names: ["legacy-api*"]` covers both.'
+- id: ats012-020-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what conditions add that match does not
+  source_readings:
+  - sections/section-020/module-02/course-01-conditions-podsecurity-and-background.md
+  prompt: What does a `conditions` block on a `PolicyException` add that tightening `match` does not?
+  options:
+  - id: a
+    text: Nothing — they are two syntaxes for the same test.
+    explanation: This option ignores that one is identity-based selection and the other is live data evaluation.
+  - id: b
+    text: A second, independent gate evaluated against live request data, so the resource itself must opt in (for example by carrying a specific label) rather than the exemption being decided purely by the exception's own definition.
+    explanation: Correct. `match` selects candidates by identity; `conditions` applies `any`/`all` key/operator/value tests with JMESPath substitution against the request. The useful consequence is that the exempted workload's own manifest shows it claiming the exemption, which is a far better review artifact than a name buried in an exception object elsewhere.
+  - id: c
+    text: It makes the exception apply to cluster-scoped resources.
+    explanation: This option is unrelated — exceptions already exempt cluster-scoped resources.
+  - id: d
+    text: It delays the exemption until the next background scan.
+    explanation: This option invents timing behaviour; `spec.background` is the field that touches scanning.
+  correct_option: b
+  explanation: "`match` selects candidates by identity; `conditions` applies `any`/`all` key/operator/value tests with JMESPath substitution against the request. The useful consequence is that the exempted workload's own manifest shows it claiming the exemption, which is a far better review artifact than a name buried in an exception object elsewhere."
+- id: ats012-020-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose a podSecurity exclusion for a narrow exemption
+  source_readings:
+  - sections/section-020/module-02/course-01-conditions-podsecurity-and-background.md
+  prompt: A Pod Security Standards policy blocks a monitoring agent that legitimately needs host namespaces. What is the most surgical exemption?
+  options:
+  - id: a
+    text: Waive the whole `baseline` rule for the `monitoring` namespace.
+    explanation: This option waives dozens of unrelated controls to solve one problem.
+  - id: b
+    text: 'Use `spec.podSecurity` with `controlName: "Host Namespaces"` and an `images` entry for that agent''s image, leaving every other control enforcing.'
+    explanation: Correct. A `podSecurity` exemption waives one named control from a Pod Security Standards rule, optionally narrowed to specific images and, with `restrictedField`/`values`, to specific field values. Every other control in the rule keeps enforcing on that same Pod.
+  - id: c
+    text: Delete the policy and re-apply it with the namespace excluded.
+    explanation: This option removes enforcement from an entire namespace permanently and leaves no audit trail.
+  - id: d
+    text: 'Set `validationFailureAction: Audit` on the policy.'
+    explanation: This option turns off blocking for the whole cluster, not for one agent.
+  correct_option: b
+  explanation: A `podSecurity` exemption waives one named control from a Pod Security Standards rule, optionally narrowed to specific images and, with `restrictedField`/`values`, to specific field values. Every other control in the rule keeps enforcing on that same Pod.
+- id: ats012-020-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose between an exception and an exclude block
+  source_readings:
+  - sections/section-020/module-02/course-02-governance-and-alternatives.md
+  prompt: A policy is intended never to apply to `kube-system`. What is the right mechanism?
+  options:
+  - id: a
+    text: A `PolicyException` in the exception namespace covering `kube-system`.
+    explanation: This option creates a permanent "temporary" exemption and adds a governed object where a scope statement belongs.
+  - id: b
+    text: An `exclude` block in the policy — this is the policy's actual scope, not a tolerated deviation.
+    explanation: Correct. `exclude` expresses what the policy permanently does not mean; a `PolicyException` expresses a deviation you are temporarily willing to tolerate and expect to revisit. Scope belongs in the policy.
+  - id: c
+    text: Either; they are equivalent.
+    explanation: This option ignores that the two differ in ownership, lifetime, RBAC surface, and whether findings appear in reports at all.
+  - id: d
+    text: Remove `kube-system` from the cluster's `resourceFilters`.
+    explanation: This option is backwards — a stock install already filters `kube-system`, and removing it would *increase* processing there.
+  correct_option: b
+  explanation: "`exclude` expresses what the policy permanently does not mean; a `PolicyException` expresses a deviation you are temporarily willing to tolerate and expect to revisit. Scope belongs in the policy."
+- id: ats012-020-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe the posture when exceptionNamespace is unset
+  source_readings:
+  - sections/section-020/module-02/course-02-governance-and-alternatives.md
+  prompt: You enable `--enablePolicyException=true` but leave `--exceptionNamespace` unset. What is the resulting posture?
+  options:
+  - id: a
+    text: Exceptions are honoured from every namespace, so anyone who can create objects in their own namespace can waive rules for their own workloads.
+    explanation: Correct. `--exceptionNamespace` is what restricts where exceptions are honoured from. Without it, the feature is cluster-wide, which converts an enforcement boundary into an opt-out available to anyone with namespace-level create permissions.
+  - id: b
+    text: Exceptions are honoured only from the `default` namespace.
+    explanation: This option invents a default namespace fallback.
+  - id: c
+    text: Exceptions are silently ignored until the flag is set.
+    explanation: This option describes the behaviour when the feature flag itself is `false`.
+  - id: d
+    text: Kyverno refuses to start.
+    explanation: This option is wrong — the configuration is valid, just dangerously broad.
+  correct_option: a
+  explanation: "`--exceptionNamespace` is what restricts where exceptions are honoured from. Without it, the feature is cluster-wide, which converts an enforcement boundary into an opt-out available to anyone with namespace-level create permissions."
+- id: ats012-020-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Count the exemptions actually in effect
+  source_readings:
+  - sections/section-020/module-02/course-02-governance-and-alternatives.md
+  prompt: "`kubectl get policyexception -A` lists six exceptions. How many exemptions are actually in effect?"
+  options:
+  - id: a
+    text: Six — each object is one exemption.
+    explanation: This option confuses intent with effect.
+  - id: b
+    text: Unknown from that command alone. Nothing validates `policyName` or `ruleNames` against real policies, and exceptions outside `--exceptionNamespace` are ignored; the reports' `skip` results with `properties.exceptions` show what is really being waived.
+    explanation: 'Correct. An exception with a typo in `policyName`, a missing `autogen-` rule name, or the wrong namespace is a perfectly valid object that waives nothing. The authoritative view of live exemptions is the reports: every `skip` result carries `properties.exceptions` naming the exception responsible.'
+  - id: c
+    text: Zero until each is approved by the admission controller.
+    explanation: This option invents an approval step.
+  - id: d
+    text: Six, minus any that are older than their `expires` annotation.
+    explanation: This option assumes Kyverno interprets an `expires` annotation, which is a convention you enforce yourself with a policy and a cleanup policy — nothing built in.
+  correct_option: b
+  explanation: 'An exception with a typo in `policyName`, a missing `autogen-` rule name, or the wrong namespace is a perfectly valid object that waives nothing. The authoritative view of live exemptions is the reports: every `skip` result carries `properties.exceptions` naming the exception responsible.'
+- id: ats012-020-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Police exceptions with a policy
+  source_readings:
+  - sections/section-020/module-02/course-02-governance-and-alternatives.md
+  prompt: 'Why would you write a Kyverno `ClusterPolicy` that validates `PolicyException` resources with `background: false`?'
+  options:
+  - id: a
+    text: Because policies over Kyverno's own CRDs cannot be background-scanned.
+    explanation: This option is wrong — Kyverno can evaluate its own CRDs, and background scans over them work.
+  - id: b
+    text: Because the rule checks the shape of an exception at creation time — requiring, say, owner and expiry annotations — and re-scanning existing exceptions hourly adds load without adding information.
+    explanation: 'Correct. The value of a hygiene policy over exceptions is blocking a badly-formed exception at admission. Periodic re-evaluation of already-accepted exceptions produces the same verdict every cycle, so `background: false` trims cost without losing anything.'
+  - id: c
+    text: Because background scanning would delete non-compliant exceptions.
+    explanation: This option is wrong — background scans never delete anything; they only report.
+  - id: d
+    text: Because `PolicyException` objects are cluster-scoped.
+    explanation: 'This option is factually wrong: `PolicyException` is namespaced.'
+  correct_option: b
+  explanation: 'The value of a hygiene policy over exceptions is blocking a badly-formed exception at admission. Periodic re-evaluation of already-accepted exceptions produces the same verdict every cycle, so `background: false` trims cost without losing anything.'
+- id: ats012-020-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: State how a PolicyException expires
+  source_readings:
+  - sections/section-020/module-03/course-01-why-exceptions-need-an-end-date.md
+  prompt: How can a `PolicyException` be made to expire on its own?
+  options:
+  - id: a
+    text: Set `spec.expires` to a date.
+    explanation: This option invents a field; `PolicyException` has no expiry field.
+  - id: b
+    text: Add the annotation `cleanup.kyverno.io/ttl`.
+    explanation: This option uses an annotation; only the label is handled.
+  - id: c
+    text: Add the label `cleanup.kyverno.io/ttl` and let the cleanup controller delete
+      it.
+    explanation: Correct. The cleanup controller honours the label `cleanup.kyverno.io/ttl`
+      on any object. The exception is deleted when the time is up and the rule applies
+      again.
+  - id: d
+    text: 'Set `background: false` on the exception.'
+    explanation: This option confuses a scanning switch with a lifetime.
+  correct_option: c
+  explanation: The cleanup controller honours the label `cleanup.kyverno.io/ttl` on
+    any object. The exception is deleted when the time is up and the rule applies
+    again.
+- id: ats012-020-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify the RBAC the cleanup controller needs
+  source_readings:
+  - sections/section-020/module-03/course-01-why-exceptions-need-an-end-date.md
+  prompt: 'An exception carries `cleanup.kyverno.io/ttl: 1h`, but it is still there
+    a day later and no error appeared. What is the most likely cause?'
+  options:
+  - id: a
+    text: The label must be an annotation.
+    explanation: This option has it backwards; the label is what is read.
+  - id: b
+    text: The cleanup controller cannot delete `policyexceptions` because no ClusterRole
+      with the aggregation label grants it.
+    explanation: 'Correct. The controller can only delete what RBAC allows. Without
+      a ClusterRole labelled `rbac.kyverno.io/aggregate-to-cleanup-controller: "true"`
+      that grants delete on `policyexceptions`, the label does nothing and nothing
+      reports it.'
+  - id: c
+    text: The exception was created in the wrong API version.
+    explanation: This option would be rejected at creation, not fail silently later.
+  - id: d
+    text: Exceptions can only be deleted by the admission controller.
+    explanation: This option names the wrong controller.
+  correct_option: b
+  explanation: 'The controller can only delete what RBAC allows. Without a ClusterRole
+    labelled `rbac.kyverno.io/aggregate-to-cleanup-controller: "true"` that grants
+    delete on `policyexceptions`, the label does nothing and nothing reports it.'
+- id: ats012-020-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Write a policy that requires a ttl
+  source_readings:
+  - sections/section-020/module-03/course-02-enforcing-and-reviewing-time-boxed-exceptions.md
+  prompt: 'You write an Enforce policy that requires the ttl label on every `PolicyException`.
+    Why set `spec.background: false`?'
+  options:
+  - id: a
+    text: Because background scans cannot read labels.
+    explanation: This option is false; scans can read labels.
+  - id: b
+    text: Because the rule is meant to block creation, not to scan exceptions that
+      already exist.
+    explanation: Correct. The policy exists to stop an exception without an end date
+      from being created. Admission does that. Existing exceptions are not judged
+      by it and must be re-applied or deleted.
+  - id: c
+    text: Because Enforce policies cannot run in the background in any case.
+    explanation: This option is false; the setting is independent of the mode.
+  - id: d
+    text: Because it makes the label optional.
+    explanation: This option reverses the effect of the rule.
+  correct_option: b
+  explanation: The policy exists to stop an exception without an end date from being
+    created. Admission does that. Existing exceptions are not judged by it and must
+    be re-applied or deleted.
+- id: ats012-020-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain what expiry does to a workload
+  source_readings:
+  - sections/section-020/module-03/course-02-enforcing-and-reviewing-time-boxed-exceptions.md
+  prompt: An exception that waived `check-limits` for a Pod is deleted by the cleanup
+    controller. The Pod is running. What is the result?
+  options:
+  - id: a
+    text: The Pod is terminated at once.
+    explanation: This option invents a rollback; deletion of the exception does not
+      touch running Pods.
+  - id: b
+    text: The Pod keeps running and the next background scan reports `fail` for the
+      rule that used to be waived.
+    explanation: Correct. Deleting the exception removes the waiver, not the workload.
+      New admissions are judged normally and the next scan records `fail`, so the
+      fix has to be planned before the expiry.
+  - id: c
+    text: The report keeps showing `skip` until the Pod restarts.
+    explanation: This option ignores that reports are recomputed by the next scan.
+  - id: d
+    text: The policy is switched to Audit mode.
+    explanation: This option invents a side effect on the policy.
+  correct_option: b
+  explanation: Deleting the exception removes the waiver, not the workload. New admissions
+    are judged normally and the next scan records `fail`, so the fix has to be planned
+    before the expiry.

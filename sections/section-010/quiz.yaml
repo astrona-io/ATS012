@@ -1,0 +1,348 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats012-010
+course_id: ATS012
+exam_code: KCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: Policy Reports
+questions:
+- id: ats012-010-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say whether a finding lands in a PolicyReport or a ClusterPolicyReport
+  source_readings:
+  - sections/section-010/module-01/course-01-policyreport-and-clusterpolicyreport.md
+  prompt: A `ClusterPolicy` evaluates `Namespace` resources and records a violation on the `finance` namespace. Where does that finding land?
+  options:
+  - id: a
+    text: In a `PolicyReport` inside the `finance` namespace, because that is the resource involved.
+    explanation: This option applies the rule to the wrong object — `finance` here is the resource being judged, not a namespace the resource lives in.
+  - id: b
+    text: In a `ClusterPolicyReport`, because `Namespace` is a cluster-scoped resource — the report kind follows the resource, not the policy.
+    explanation: Correct. The choice between `PolicyReport` and `ClusterPolicyReport` is determined by the scope of the *reported resource*. A `Namespace` is cluster-scoped, so its findings go into a `ClusterPolicyReport`, even though a namespace "contains" things.
+  - id: c
+    text: In a `PolicyReport` inside the `kyverno` namespace, where all cluster-level findings are collected.
+    explanation: This option invents a central collection namespace; Kyverno does not funnel findings into `kyverno`.
+  - id: d
+    text: In both a `PolicyReport` and a `ClusterPolicyReport`, mirrored.
+    explanation: This option invents duplication that does not happen — each finding is recorded once.
+  correct_option: b
+  explanation: The choice between `PolicyReport` and `ClusterPolicyReport` is determined by the scope of the *reported resource*. A `Namespace` is cluster-scoped, so its findings go into a `ClusterPolicyReport`, even though a namespace "contains" things.
+- id: ats012-010-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain why a report is named after the reported resource's UID
+  source_readings:
+  - sections/section-010/module-01/course-01-policyreport-and-clusterpolicyreport.md
+  prompt: "`kubectl get polr -A` returns reports whose names are UUIDs like `487df031-11d8-4ab4-b089-dfc0db1e533e`. What is that UUID?"
+  options:
+  - id: a
+    text: A random identifier assigned per scan cycle.
+    explanation: This option would break the owner-reference and garbage-collection model, and would produce a new object every cycle.
+  - id: b
+    text: The `metadata.uid` of the resource the report describes — modern Kyverno keeps one report per resource.
+    explanation: Correct. Since Kyverno 1.10 reports are stored per-resource and named after the reported resource's UID, with an `ownerReferences` entry back to that resource so the report is garbage-collected when the resource is deleted. You find a report by the `KIND`/`NAME` printer columns or via the resource's UID, never by guessing a name.
+  - id: c
+    text: The UID of the `ClusterPolicy` that produced the finding.
+    explanation: This option is backwards — one report holds results from every policy that evaluated that one resource.
+  - id: d
+    text: A hash of the policy name plus the namespace name.
+    explanation: This option describes the pre-1.10 aggregated naming idea, which was `polr-ns-<namespace>`, not a hash.
+  correct_option: b
+  explanation: Since Kyverno 1.10 reports are stored per-resource and named after the reported resource's UID, with an `ownerReferences` entry back to that resource so the report is garbage-collected when the resource is deleted. You find a report by the `KIND`/`NAME` printer columns or via the resource's UID, never by guessing a name.
+- id: ats012-010-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish the five result values and what produces skip
+  source_readings:
+  - sections/section-010/module-01/course-02-reading-results-and-result-types.md
+  prompt: 'A report entry reads `result: skip`. What does that tell you?'
+  options:
+  - id: a
+    text: The rule did not match the resource, so nothing was evaluated.
+    explanation: This option describes the case that produces **no result entry at all**; a non-matching resource simply never appears for that rule.
+  - id: b
+    text: The rule matched but was deliberately not applied — a precondition was false, a conditional anchor's condition was unmet, or a `PolicyException` exempted the resource.
+    explanation: Correct. `skip` is a positive statement that the rule *did* apply to this resource and was then deliberately not enforced. When the cause is a `PolicyException`, the entry also carries `properties.exceptions` naming the exception — which is exactly what makes exemptions auditable.
+  - id: c
+    text: Kyverno could not evaluate the rule because of an internal error.
+    explanation: This option describes `error`.
+  - id: d
+    text: The resource passed, but the policy is advisory.
+    explanation: 'This option describes `warn` — the advisory downgrade caused by `policies.kyverno.io/scored: "false"`.'
+  correct_option: b
+  explanation: "`skip` is a positive statement that the rule *did* apply to this resource and was then deliberately not enforced. When the cause is a `PolicyException`, the entry also carries `properties.exceptions` naming the exception — which is exactly what makes exemptions auditable."
+- id: ats012-010-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what scored false changes about a report
+  source_readings:
+  - sections/section-010/module-01/course-02-reading-results-and-result-types.md
+  prompt: Your CI gate fails a build when `summary.fail > 0` in any `PolicyReport`. A policy is clearly being violated by dozens of workloads, but the gate never trips. What should you check first?
+  options:
+  - id: a
+    text: 'Whether the policy has `validationFailureAction: Enforce`.'
+    explanation: This option is irrelevant — `Enforce` vs `Audit` changes whether the resource is admitted, not which counter a recorded failure increments.
+  - id: b
+    text: 'Whether the policy carries `policies.kyverno.io/scored: "false"`, which converts every failure into a `warn` and leaves `summary.fail` at zero.'
+    explanation: 'Correct. `scored: "false"` marks a policy as advisory. Its violations are still recorded, but as `warn`, so `summary.warn` climbs while `summary.fail` stays at zero. A gate written only against `fail` will never see them.'
+  - id: c
+    text: Whether background scanning is enabled on the cluster.
+    explanation: This option would produce no report entries at all, not entries with a zero `fail` counter, and the question states violations are visible.
+  - id: d
+    text: Whether the reports CRDs are installed.
+    explanation: This option would mean no reports exist whatsoever.
+  correct_option: b
+  explanation: '`scored: "false"` marks a policy as advisory. Its violations are still recorded, but as `warn`, so `summary.warn` climbs while `summary.fail` stays at zero. A gate written only against `fail` will never see them.'
+- id: ats012-010-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish admission-path findings from background-scan findings
+  source_readings:
+  - sections/section-010/module-02/course-01-the-reports-pipeline.md
+  prompt: You apply an `Audit` policy to a cluster. A Pod created immediately afterwards shows up in a report within seconds, but a Deployment that has been running for months does not appear at all. Nothing is misconfigured. Why?
+  options:
+  - id: a
+    text: Background scanning only covers Pods, never Deployments.
+    explanation: This option invents a kind restriction that does not exist.
+  - id: b
+    text: The new Pod went through the admission path (immediate); the old Deployment can only be seen by a background scan, which runs every `--backgroundScanInterval` — one hour by default.
+    explanation: Correct. There are two independent producers of report data on two different clocks. The admission controller records findings as part of handling a live request, so new violations appear almost at once. Pre-existing resources generate no admission request, so they wait for the reports controller's periodic background scan — `--backgroundScanInterval`, default `1h`.
+  - id: c
+    text: Reports are only generated for resources created after the reports controller last restarted.
+    explanation: This option is wrong — background scans cover everything matching, regardless of creation time.
+  - id: d
+    text: "`Audit` mode disables reporting for pre-existing resources."
+    explanation: This option is backwards; `Audit` mode is precisely the mode whose whole output *is* reports.
+  correct_option: b
+  explanation: There are two independent producers of report data on two different clocks. The admission controller records findings as part of handling a live request, so new violations appear almost at once. Pre-existing resources generate no admission request, so they wait for the reports controller's periodic background scan — `--backgroundScanInterval`, default `1h`.
+- id: ats012-010-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the controller that owns the background scan
+  source_readings:
+  - sections/section-010/module-02/course-01-the-reports-pipeline.md
+  prompt: Which controller owns the periodic background scan that produces report data for already-existing resources?
+  options:
+  - id: a
+    text: "`kyverno-background-controller`, as the name suggests."
+    explanation: This option is the trap the name sets; checking which Deployment actually carries the `--backgroundScanInterval` flag settles it.
+  - id: b
+    text: "`kyverno-reports-controller` — the background controller owns `generate` and `mutateExisting` rules, not report scanning."
+    explanation: Correct. Despite the naming collision, background *scanning for reports* belongs to `kyverno-reports-controller` — it carries `--backgroundScan`, `--backgroundScanInterval` and `--backgroundScanWorkers`. The `kyverno-background-controller` handles `generate` and `mutateExisting` rules, which create and patch resources.
+  - id: c
+    text: "`kyverno-admission-controller`, which handles all policy evaluation."
+    explanation: This option handles the live admission path only.
+  - id: d
+    text: "`kyverno-cleanup-controller`."
+    explanation: This option owns `CleanupPolicy` and TTL-based deletion.
+  correct_option: b
+  explanation: Despite the naming collision, background *scanning for reports* belongs to `kyverno-reports-controller` — it carries `--backgroundScan`, `--backgroundScanInterval` and `--backgroundScanWorkers`. The `kyverno-background-controller` handles `generate` and `mutateExisting` rules, which create and patch resources.
+- id: ats012-010-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what an EphemeralReport is
+  source_readings:
+  - sections/section-010/module-02/course-01-the-reports-pipeline.md
+  prompt: What is an `EphemeralReport`, and how should you treat it?
+  options:
+  - id: a
+    text: The final, stable report object — read it directly in dashboards.
+    explanation: This option names the wrong object as stable — `polr`/`cpolr` are the stable API.
+  - id: b
+    text: A short-lived intermediate object that either controller writes findings into, which the reports controller then aggregates into a `PolicyReport` and deletes. It is internal plumbing and should not be built against.
+    explanation: Correct. `ephemeralreports.reports.kyverno.io` (and its cluster-scoped twin) are the staging area that lets the admission controller and the reports controller both produce findings without fighting over one `PolicyReport` object. The reports controller merges them into the stable `wgpolicyk8s.io` report and deletes the ephemeral object. Their schema and behaviour are internal and may change between versions.
+  - id: c
+    text: A report for Pods that have already been deleted.
+    explanation: This option invents a purpose; reports are garbage-collected with their resource.
+  - id: d
+    text: A cached copy of a `PolicyReport` kept for performance.
+    explanation: This option is wrong — it is a write-side staging area, not a read cache.
+  correct_option: b
+  explanation: "`ephemeralreports.reports.kyverno.io` (and its cluster-scoped twin) are the staging area that lets the admission controller and the reports controller both produce findings without fighting over one `PolicyReport` object. The reports controller merges them into the stable `wgpolicyk8s.io` report and deletes the ephemeral object. Their schema and behaviour are internal and may change between versions."
+- id: ats012-010-q08
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain why resourceFilters does not stop background reporting by default
+  source_readings:
+  - sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
+  prompt: You add `[*/*,noisy-ns,*]` to `resourceFilters` in the `kyverno` ConfigMap, but `PolicyReport` objects keep appearing in `noisy-ns`. What is going on?
+  options:
+  - id: a
+    text: "`resourceFilters` needs a controller restart before it takes effect at all."
+    explanation: This option is wrong — the ConfigMap is watched, and a restart would not change the flag's behaviour anyway.
+  - id: b
+    text: The reports controller runs with `--skipResourceFilters=true` by default, so background scans deliberately ignore `resourceFilters`; set it to `false` to make the filter apply to reporting too.
+    explanation: Correct. `--skipResourceFilters` on `kyverno-reports-controller` defaults to `true`, meaning background scanning skips *applying* the filters. The design intent is that a performance exclusion at the admission webhook should not silently blind compliance reporting. Setting `--skipResourceFilters=false` makes background scans obey `resourceFilters`.
+  - id: c
+    text: "`resourceFilters` only accepts `[kind,name]` pairs, so the entry is invalid."
+    explanation: This option misstates the format, which is `[kind,namespace,name]`.
+  - id: d
+    text: Reports are never affected by any configuration — they always cover every resource.
+    explanation: This option is wrong — `--enableReporting`, `--policyReports` and `--skipResourceFilters` all shape what gets reported.
+  correct_option: b
+  explanation: "`--skipResourceFilters` on `kyverno-reports-controller` defaults to `true`, meaning background scanning skips *applying* the filters. The design intent is that a performance exclusion at the admission webhook should not silently blind compliance reporting. Setting `--skipResourceFilters=false` makes background scans obey `resourceFilters`."
+- id: ats012-010-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what spec.background false does to reports
+  source_readings:
+  - sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
+  prompt: 'A `ClusterPolicy` is applied with `spec.background: false`, and a Deployment that existed before it violates one of its rules. What appears in the reports?'
+  options:
+  - id: a
+    text: A `fail` entry once the next background scan runs.
+    explanation: 'This option describes `spec.background: true`.'
+  - id: b
+    text: 'Nothing for that pre-existing Deployment, ever — `spec.background: false` means the policy is only evaluated at admission time.'
+    explanation: Correct. `background` is a policy-level field (`spec.background`, default `true`). Setting it to `false` opts the whole policy out of periodic re-scanning. The pre-existing resource generates no admission request, and the background scan will not look at it, so no result entry is ever produced for that pairing. This is by design and is the correct setting for a policy whose rules inspect request-specific context such as `request.userInfo`.
+  - id: c
+    text: A `skip` entry, recording that background evaluation was disabled.
+    explanation: This option misuses `skip`, which records a rule that matched and was deliberately not enforced.
+  - id: d
+    text: An `error` entry, because the rule cannot be evaluated outside admission.
+    explanation: This option misuses `error`, which records a failed evaluation such as a broken variable substitution.
+  correct_option: b
+  explanation: "`background` is a policy-level field (`spec.background`, default `true`). Setting it to `false` opts the whole policy out of periodic re-scanning. The pre-existing resource generates no admission request, and the background scan will not look at it, so no result entry is ever produced for that pairing. This is by design and is the correct setting for a policy whose rules inspect request-specific context such as `request.userInfo`."
+- id: ats012-010-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Tune scan workers and interval for a scan that cannot finish
+  source_readings:
+  - sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
+  prompt: Your reports are consistently an hour stale, the reports controller's CPU is saturated, and a single scan cycle is taking longer than the interval between cycles. Which change addresses the actual problem?
+  options:
+  - id: a
+    text: Lower `--backgroundScanInterval` so scans start more often.
+    explanation: 'This option makes it strictly worse: starting cycles more often on a controller that cannot finish one is how you build a permanent backlog.'
+  - id: b
+    text: Raise `--backgroundScanWorkers` so each scan cycle completes faster, then reassess the interval.
+    explanation: Correct. The symptom is a scan that cannot finish within its own cycle. `--backgroundScanWorkers` (default `2`) controls how many worker threads process a scan, so raising it is the lever that makes a cycle complete faster. Only once cycles finish comfortably does changing the interval make sense.
+  - id: c
+    text: Set `--policyReports=false` to stop generating reports.
+    explanation: This option disables the reporting system rather than fixing it.
+  - id: d
+    text: Delete the accumulated `PolicyReport` objects to free memory.
+    explanation: This option treats a symptom — reports are owned by their resources and are recreated on the next scan.
+  correct_option: b
+  explanation: The symptom is a scan that cannot finish within its own cycle. `--backgroundScanWorkers` (default `2`) controls how many worker threads process a scan, so raising it is the lever that makes a cycle complete faster. Only once cycles finish comfortably does changing the interval make sense.
+- id: ats012-010-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say where severity and category in a report come from
+  source_readings:
+  - sections/section-010/module-03/course-01-severity-and-category-in-results.md
+  prompt: Where does the severity shown on a result in a `PolicyReport` come from?
+  options:
+  - id: a
+    text: From the Kubernetes event that Kyverno emits when the rule fails.
+    explanation: This option invents a source; reports are not built from events.
+  - id: b
+    text: From the policy annotation `policies.kyverno.io/severity`, copied into each
+      result.
+    explanation: Correct. Kyverno copies the `policies.kyverno.io/severity` and `category`
+      annotations of the policy into each result, so the report can be filtered by
+      them without looking up the policy.
+  - id: c
+    text: From the `validationFailureAction` of the policy.
+    explanation: This option confuses enforcement mode with severity; the two are
+      unrelated.
+  - id: d
+    text: From a label on the reported resource.
+    explanation: This option reads the wrong object; severity belongs to the policy.
+  correct_option: b
+  explanation: Kyverno copies the `policies.kyverno.io/severity` and `category` annotations
+    of the policy into each result, so the report can be filtered by them without
+    looking up the policy.
+- id: ats012-010-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict what deleting a resource does to its report
+  source_readings:
+  - sections/section-010/module-03/course-02-report-lifecycle-and-tooling.md
+  prompt: A Pod that has a failing result in a `PolicyReport` is deleted. What happens
+    to that result?
+  options:
+  - id: a
+    text: It stays until an administrator deletes the report.
+    explanation: This option ignores ownership; reports are owned by the resource
+      they describe.
+  - id: b
+    text: It is removed with the report, because the report is owned by the Pod.
+    explanation: Correct. A report is owned by the resource it describes, so Kubernetes
+      garbage collection removes the report when the resource is deleted. Reports
+      are a current-state view, not a history.
+  - id: c
+    text: It moves to the `ClusterPolicyReport` as a historical record.
+    explanation: This option invents an archive behaviour that does not exist.
+  - id: d
+    text: It changes to `skip`.
+    explanation: This option confuses a deleted resource with an exempted one.
+  correct_option: b
+  explanation: A report is owned by the resource it describes, so Kubernetes garbage
+    collection removes the report when the resource is deleted. Reports are a current-state
+    view, not a history.
+- id: ats012-010-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Count findings across every scope
+  source_readings:
+  - sections/section-010/module-03/course-01-severity-and-category-in-results.md
+  prompt: You count failing results with `kubectl get polr -A` and a jsonpath filter.
+    A colleague says the number is too low. What is the most likely gap?
+  options:
+  - id: a
+    text: "`polr` only shows `warn` results."
+    explanation: This option invents a filter that `polr` does not apply.
+  - id: b
+    text: Cluster-scoped resources report into the `ClusterPolicyReport`, which `polr`
+      does not list.
+    explanation: Correct. `PolicyReport` objects are namespaced. Findings on cluster-scoped
+      resources such as Namespaces go into the `ClusterPolicyReport`, so add `cpolr`
+      to the count.
+  - id: c
+    text: Reports older than an hour are hidden by default.
+    explanation: This option invents an age cutoff.
+  - id: d
+    text: Policies in `Audit` mode never write results.
+    explanation: This option is false; Audit mode is the one that reports violations.
+  correct_option: b
+  explanation: "`PolicyReport` objects are namespaced. Findings on cluster-scoped
+    resources such as Namespaces go into the `ClusterPolicyReport`, so add `cpolr`
+    to the count."
+- id: ats012-010-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe what a reporting UI adds
+  source_readings:
+  - sections/section-010/module-03/course-02-report-lifecycle-and-tooling.md
+  prompt: What does Policy Reporter, the separate open-source tool, do with Kyverno
+    reports?
+  options:
+  - id: a
+    text: It changes the result of a rule after the fact.
+    explanation: This option gives the tool a power it does not have; it reads reports,
+      it does not alter them.
+  - id: b
+    text: It evaluates policies in place of the Kyverno controllers.
+    explanation: This option confuses a reader of reports with the engine that writes
+      them.
+  - id: c
+    text: It reads the same report objects and adds a UI, metrics and notification
+      targets.
+    explanation: Correct. Policy Reporter consumes the report objects you can already
+      read with kubectl and adds a dashboard, metrics and notification outputs. The
+      meaning of `warn` and `skip` stays the same.
+  - id: d
+    text: It stores results permanently in the Kyverno namespace.
+    explanation: This option invents storage that the tool does not provide in this
+      way.
+  correct_option: c
+  explanation: Policy Reporter consumes the report objects you can already read with
+    kubectl and adds a dashboard, metrics and notification outputs. The meaning of
+    `warn` and `skip` stays the same.

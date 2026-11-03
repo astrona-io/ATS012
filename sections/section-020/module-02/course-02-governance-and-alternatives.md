@@ -1,6 +1,6 @@
 # Part 2 — Governance, Alternatives & Auditing
 
-> Prerequisite: [Part 1 — Narrowing an Exception](./course-01-conditions-podsecurity-and-background.md). Next: [Section 030 — Kyverno Metrics](../../section-030/README.md).
+> Prerequisite: [Part 1 — Narrowing an Exception](./course-01-conditions-podsecurity-and-background.md). Next: [Summary](./course-03-summary.md).
 
 ## Exception or `exclude`? A decision you should be able to defend
 

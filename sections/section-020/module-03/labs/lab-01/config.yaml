@@ -1,0 +1,34 @@
+metadata:
+  name: "ats-012-lab-011"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "lab-011-setup"
+      description: "Creates batch-ns and platform-ns, enables PolicyExceptions for platform-ns and applies the Enforce limits policy"
+      type: "file"
+      source: "bootstrap/02-seed.sh"
+
+validation:
+  scripts:
+    - name: "cleanup-controller-may-delete-exceptions"
+      description: "Confirms the cleanup controller's service account is allowed to delete PolicyExceptions through an aggregated ClusterRole"
+      type: "file"
+      source: "validation/01-cleanup-rbac.sh"
+    - name: "exceptions-must-carry-a-ttl"
+      description: "Confirms the Enforce policy requires the ttl label on PolicyExceptions and rejected an exception without it"
+      type: "file"
+      source: "validation/02-ttl-policy.sh"
+    - name: "time-boxed-exception-works"
+      description: "Confirms the exception carries a ttl of 8h and an owner, waives only the intended rule for grace-pod and leaves strict-pod blocked"
+      type: "file"
+      source: "validation/03-timeboxed-exception.sh"
+
+teardown:
+  keepCluster: false

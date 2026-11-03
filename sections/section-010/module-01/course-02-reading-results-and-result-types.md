@@ -1,6 +1,6 @@
 # Part 2 — Reading Results: the Five Result Types
 
-> Prerequisite: [Part 1 — PolicyReport and ClusterPolicyReport](./course-01-policyreport-and-clusterpolicyreport.md). Next: [Module 2 — The Reports Pipeline & Its Tuning](../module-02/course.md).
+> Prerequisite: [Part 1 — PolicyReport and ClusterPolicyReport](./course-01-policyreport-and-clusterpolicyreport.md). Next: [Summary](./course-03-summary.md).
 
 Every entry in `results[]` carries exactly one `result` value, and there are only five. Knowing which condition produces which value is the difference between "the report says `skip`, so the policy is broken" and "the report says `skip`, so a precondition correctly excluded this resource".
 

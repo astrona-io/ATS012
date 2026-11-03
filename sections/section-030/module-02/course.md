@@ -27,3 +27,7 @@ After this module you can:
 ## Before you start
 
 You should be able to scrape `/metrics` from inside the cluster and recognise the core metric families (Module 1). The linked lab gives you a kind cluster with Kyverno v1.13.2, two namespaces to treat differently, and a probe Pod for scraping.
+
+Launch your playground now, and keep it running next to you while you read the parts:
+
+<!-- astrona:playground -->

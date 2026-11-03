@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# The Metrics Endpoint & Core Metric Families (PLAYGROUND) - playground environment.
+# A clean sandbox: it installs Kyverno v1.13.2, seeds the starting state, then
+# stays running for free exploration. No task, no grading, no `astrona submit`.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-012-playground-030-01
+  docs:
+    guide: docs/overview.md
+
+bootstrap:
+  init:
+    - name: install-kyverno
+      description: Installs Kyverno v1.13.2 onto the kind cluster
+      type: file
+      source: bootstrap/01-install-kyverno.sh
+    - name: seed-playground
+      description: Creates the starting namespaces, policies and workloads for this playground
+      type: file
+      source: bootstrap/02-seed.sh
+
+teardown:
+  keepCluster: false

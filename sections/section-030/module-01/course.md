@@ -38,3 +38,7 @@ After this module you can:
 ## Before you start
 
 You need no Prometheus installation for this module — everything is done against the raw `/metrics` text endpoint with `curl`. The linked lab gives you a kind cluster with Kyverno v1.13.2 and a pre-created probe Pod you can `kubectl exec` into to scrape from inside the cluster.
+
+Launch your playground now, and keep it running next to you while you read the parts:
+
+<!-- astrona:playground -->

@@ -1,6 +1,6 @@
 # Part 2 — Using Metrics in Practice
 
-> Prerequisite: [Part 1 — The kyverno-metrics ConfigMap](./course-01-the-kyverno-metrics-configmap.md). Next: [Final Domain Quiz](../../final-domain-quiz.md).
+> Prerequisite: [Part 1 — The kyverno-metrics ConfigMap](./course-01-the-kyverno-metrics-configmap.md). Next: [Summary](./course-03-summary.md).
 
 ## The alerts worth having
 

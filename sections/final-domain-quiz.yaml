@@ -1,0 +1,574 @@
+# Final domain knowledge check across all three sections.
+schema_version: 1
+kind: question_bank
+id: ats012-final
+course_id: ATS012
+exam_code: KCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: policy-management
+  title: Policy Management
+questions:
+- id: ats012-final-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say which report kind holds a finding for a cluster-scoped resource
+  source_readings:
+  - sections/section-010/module-01/course-01-policyreport-and-clusterpolicyreport.md
+  prompt: A `ClusterPolicy` reports a violation on a `PersistentVolume`. Which report object holds it?
+  options:
+  - id: a
+    text: A `PolicyReport` in the `kyverno` namespace.
+    explanation: This option invents a central collection namespace.
+  - id: b
+    text: A `ClusterPolicyReport`, because `PersistentVolume` is cluster-scoped.
+    explanation: Correct. The report kind follows the scope of the *reported resource*, never the policy. A cluster-scoped resource's findings go into `ClusterPolicyReport` (`cpolr`).
+  - id: c
+    text: A `PolicyReport` in the namespace of the Pod using the volume.
+    explanation: This option invents a relationship to consumers of the resource.
+  - id: d
+    text: Neither; cluster-scoped resources are not reported on.
+    explanation: This option is contradicted by the existence of `ClusterPolicyReport`.
+  correct_option: b
+  explanation: The report kind follows the scope of the *reported resource*, never the policy. A cluster-scoped resource's findings go into `ClusterPolicyReport` (`cpolr`).
+- id: ats012-final-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain why a report is named after the resource UID
+  source_readings:
+  - sections/section-010/module-01/course-01-policyreport-and-clusterpolicyreport.md
+  prompt: Why is a modern Kyverno `PolicyReport` named after a UUID?
+  options:
+  - id: a
+    text: To avoid name collisions between policies.
+    explanation: This option misidentifies what is being disambiguated.
+  - id: b
+    text: Because it is the reported resource's `metadata.uid` — reports are stored per-resource, with an owner reference so they are garbage-collected with the resource.
+    explanation: Correct. Since Kyverno 1.10 the model is one report per resource, named by that resource's UID, owned by it. You locate one via the `KIND`/`NAME` printer columns or from the resource's UID — never by guessing.
+  - id: c
+    text: Because report names are randomly regenerated on each scan.
+    explanation: This option would break owner references and garbage collection.
+  - id: d
+    text: Because the UUID encodes the policy and rule names.
+    explanation: This option invents an encoding.
+  correct_option: b
+  explanation: Since Kyverno 1.10 the model is one report per resource, named by that resource's UID, owned by it. You locate one via the `KIND`/`NAME` printer columns or from the resource's UID — never by guessing.
+- id: ats012-final-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what skip means and when a rule produces it
+  source_readings:
+  - sections/section-010/module-01/course-02-reading-results-and-result-types.md
+  prompt: 'A report result shows `result: warn`. What produced it?'
+  options:
+  - id: a
+    text: A rule whose severity is set to `medium`.
+    explanation: This option confuses the independent `severity` field with the result value.
+  - id: b
+    text: A precondition that evaluated false.
+    explanation: This option produces `skip`.
+  - id: c
+    text: 'A failure on a policy annotated `policies.kyverno.io/scored: "false"`, which downgrades failures to warnings.'
+    explanation: 'Correct. `warn` exists only because a policy was marked advisory with `scored: "false"`. Its violations increment `summary.warn` and leave `summary.fail` at zero — which is why a CI gate written only against `fail` silently ignores such policies.'
+  - id: d
+    text: A variable substitution error.
+    explanation: This option produces `error`.
+  correct_option: c
+  explanation: '`warn` exists only because a policy was marked advisory with `scored: "false"`. Its violations increment `summary.warn` and leave `summary.fail` at zero — which is why a CI gate written only against `fail` silently ignores such policies.'
+- id: ats012-final-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain which controller and path produce admission versus background findings
+  source_readings:
+  - sections/section-010/module-02/course-01-the-reports-pipeline.md
+  prompt: You apply a policy to a cluster full of long-running workloads. New violations appear in reports within seconds; the pre-existing ones do not appear at all after ten minutes. What is the most likely explanation?
+  options:
+  - id: a
+    text: Pre-existing resources are never reported on.
+    explanation: This option contradicts the purpose of background scanning.
+  - id: b
+    text: The admission path is immediate; pre-existing resources wait for the reports controller's background scan, whose `--backgroundScanInterval` defaults to `1h`.
+    explanation: Correct. Two producers, two clocks. Admission-time findings are recorded as part of handling the request; pre-existing resources generate no request and wait for a periodic scan, hourly by default.
+  - id: c
+    text: The background controller has crashed.
+    explanation: This option names the wrong controller — report scanning belongs to `kyverno-reports-controller`.
+  - id: d
+    text: "`validationFailureAction: Audit` suppresses reports for old resources."
+    explanation: This option inverts what `Audit` does.
+  correct_option: b
+  explanation: Two producers, two clocks. Admission-time findings are recorded as part of handling the request; pre-existing resources generate no request and wait for a periodic scan, hourly by default.
+- id: ats012-final-q05
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain what resourceFilters does to background reporting
+  source_readings:
+  - sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
+  prompt: You add `[*/*,noisy-ns,*]` to `resourceFilters` in the `kyverno` ConfigMap, yet `noisy-ns` still produces `PolicyReport` entries. What is happening?
+  options:
+  - id: a
+    text: "`resourceFilters` only accepts `[kind,name]` pairs."
+    explanation: This option misstates the `[kind,namespace,name]` format.
+  - id: b
+    text: The reports controller defaults to `--skipResourceFilters=true`, so background scans deliberately ignore `resourceFilters`. Set it to `false`.
+    explanation: Correct. The flag means "skip *applying* the filters", and `true` is the shipped default on the reports controller — the design intent being that a performance exclusion at the webhook should not silently blind compliance reporting.
+  - id: c
+    text: The ConfigMap requires a controller restart before any entry applies.
+    explanation: This option is wrong — the ConfigMap is watched.
+  - id: d
+    text: "`resourceFilters` applies only to `generate` rules."
+    explanation: This option invents a rule-type restriction.
+  correct_option: b
+  explanation: The flag means "skip *applying* the filters", and `true` is the shipped default on the reports controller — the design intent being that a performance exclusion at the webhook should not silently blind compliance reporting.
+- id: ats012-final-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Tune a background scan that cannot finish
+  source_readings:
+  - sections/section-010/module-02/course-02-tuning-and-troubleshooting-reports.md
+  prompt: Your reports are permanently an hour stale and a single background scan cycle is taking longer than the interval between cycles. What is the right first move?
+  options:
+  - id: a
+    text: Lower `--backgroundScanInterval` so scans start more frequently.
+    explanation: This option makes a backlog worse by starting more cycles.
+  - id: b
+    text: Raise `--backgroundScanWorkers` so each cycle finishes faster.
+    explanation: Correct. The symptom is a cycle that cannot complete in its own window. Worker count is the lever that makes a cycle faster; only once cycles complete comfortably is the interval worth revisiting.
+  - id: c
+    text: Set `--policyReports=false`.
+    explanation: This option disables the system instead of fixing it.
+  - id: d
+    text: Delete the existing report objects.
+    explanation: This option treats a symptom — reports are owned by resources and regenerate.
+  correct_option: b
+  explanation: The symptom is a cycle that cannot complete in its own window. Worker count is the lever that makes a cycle faster; only once cycles complete comfortably is the interval worth revisiting.
+- id: ats012-final-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Diagnose an exception that has no effect
+  source_readings:
+  - sections/section-020/module-01/course-01-enabling-policyexceptions.md
+  prompt: You create a `PolicyException` and the policy keeps blocking. What do you check first?
+  options:
+  - id: a
+    text: The `match` block's `names` wildcard.
+    explanation: This option are real causes but much less common, and cheap to check second.
+  - id: b
+    text: Whether the referenced policy still exists.
+    explanation: This option are real causes but much less common, and cheap to check second.
+  - id: c
+    text: Whether `--enablePolicyException=true` and a matching `--exceptionNamespace` are set on the controllers — the feature is off by default and fails completely silently.
+    explanation: Correct. The CRD ships installed but the feature ships disabled. Without the flag the object is stored happily and has no effect — no error, no event, no warning anywhere.
+  - id: d
+    text: Whether the exception has an `expires` annotation in the past.
+    explanation: This option invents built-in expiry handling; Kyverno does not interpret an `expires` annotation.
+  correct_option: c
+  explanation: The CRD ships installed but the feature ships disabled. Without the flag the object is stored happily and has no effect — no error, no event, no warning anywhere.
+- id: ats012-final-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use ruleNames correctly with autogen rules
+  source_readings:
+  - sections/section-020/module-01/course-02-anatomy-of-a-policyexception.md
+  prompt: 'A Deployment is blocked by a policy whose only rule is `check-limits`, matching `kinds: [Pod]`. Which `ruleNames` does a working exception need?'
+  options:
+  - id: a
+    text: "`check-limits` only."
+    explanation: This option leaves the blocking rule un-waived.
+  - id: b
+    text: "`check-limits` and `autogen-check-limits`."
+    explanation: Correct. Autogen adds `autogen-`-prefixed copies of a Pod-scoped rule for Pod-owning controllers. The Deployment request is rejected by `autogen-check-limits`; the Pods the ReplicaSet then creates are judged by `check-limits`. Covering the whole workload needs both, and the exception's `match` must include the `Deployment` kind as well as `Pod`.
+  - id: c
+    text: "`autogen-check-limits` only, since Deployments are never matched directly."
+    explanation: This option leaves the Pods blocked.
+  - id: d
+    text: None; `ruleNames` is optional and defaults to all rules.
+    explanation: This option invents a default.
+  correct_option: b
+  explanation: Autogen adds `autogen-`-prefixed copies of a Pod-scoped rule for Pod-owning controllers. The Deployment request is rejected by `autogen-check-limits`; the Pods the ReplicaSet then creates are judged by `check-limits`. Covering the whole workload needs both, and the exception's `match` must include the `Deployment` kind as well as `Pod`.
+- id: ats012-final-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Match pods created by a Deployment in an exception
+  source_readings:
+  - sections/section-020/module-01/course-02-anatomy-of-a-policyexception.md
+  prompt: 'An exception''s `match` uses `names: ["batch-runner"]`. The Deployment is admitted; its Pods are still blocked. Why?'
+  options:
+  - id: a
+    text: Pods require a separate exception object.
+    explanation: This option invent restrictions — one exception can match several kinds and names.
+  - id: b
+    text: Exceptions cannot cover resources created by controllers.
+    explanation: This option invent restrictions — one exception can match several kinds and names.
+  - id: c
+    text: The Pods are named `batch-runner-<hash>-<hash>`, so an exact-name match misses them; use `batch-runner*`.
+    explanation: Correct. ReplicaSets append hashes to Pod names. A prefix wildcard covers the controller and the Pods it spawns; an exact name covers only the controller.
+  - id: d
+    text: The exception's `background` field is `false`.
+    explanation: This option would affect background scanning, not admission.
+  correct_option: c
+  explanation: ReplicaSets append hashes to Pod names. A prefix wildcard covers the controller and the Pods it spawns; an exact name covers only the controller.
+- id: ats012-final-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Enable exceptions on every controller and set the exception namespace
+  source_readings:
+  - sections/section-020/module-01/course-01-enabling-policyexceptions.md
+  prompt: Exceptions are enabled on the admission controller only. What is the observable result?
+  options:
+  - id: a
+    text: Nothing works; exceptions need all four controllers.
+    explanation: This option overstates it — the cleanup controller is irrelevant here.
+  - id: b
+    text: The exempted workload is admitted, but reports still record `fail` instead of `skip`, because the reports controller does not honour the exception.
+    explanation: 'Correct. Each controller applies the flag to its own work: admission decides whether the resource is admitted, reports decides whether a scan records `skip`. Half-enabling produces exactly this enforcement-versus-record mismatch — and the report is what an auditor reads.'
+  - id: c
+    text: The workload stays blocked, but reports show `skip`.
+    explanation: This option is the reverse case (reports only).
+  - id: d
+    text: Exceptions apply, but only to cluster-scoped resources.
+    explanation: This option invents a scope restriction.
+  correct_option: b
+  explanation: 'Each controller applies the flag to its own work: admission decides whether the resource is admitted, reports decides whether a scan records `skip`. Half-enabling produces exactly this enforcement-versus-record mismatch — and the report is what an auditor reads.'
+- id: ats012-final-q11
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Narrow an exception with conditions
+  source_readings:
+  - sections/section-020/module-02/course-01-conditions-podsecurity-and-background.md
+  prompt: What does adding a `conditions` block to a `PolicyException` buy you over simply narrowing `match`?
+  options:
+  - id: a
+    text: It makes the exception apply during background scans.
+    explanation: This option is `spec.background`'s job.
+  - id: b
+    text: It removes the need to list `autogen-` rule names.
+    explanation: This option is unrelated — autogen names are still needed.
+  - id: c
+    text: A second, independent gate evaluated against live request data — so each workload must opt in itself, for example by carrying a specific label, and that claim is visible in the workload's own manifest.
+    explanation: 'Correct. `match` selects candidates by identity; `conditions` applies `any`/`all` key/operator/value tests with JMESPath substitution against the request. The review benefit is real: the exemption claim lives in the exempted thing.'
+  - id: d
+    text: It lets one exception cover several policies.
+    explanation: This option is done with multiple `spec.exceptions[]` entries.
+  correct_option: c
+  explanation: "`match` selects candidates by identity; `conditions` applies `any`/`all` key/operator/value tests with JMESPath substitution against the request. The review benefit is real: the exemption claim lives in the exempted thing."
+- id: ats012-final-q12
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Police exceptions with a policy
+  source_readings:
+  - sections/section-020/module-02/course-02-governance-and-alternatives.md
+  prompt: A policy should permanently never apply to `kube-system`, and separately one legacy workload needs a temporary waiver. What is the right pairing?
+  options:
+  - id: a
+    text: "`exclude` for both."
+    explanation: This option hides a temporary waiver inside the enforcement document with no audit trail.
+  - id: b
+    text: "`PolicyException` for both."
+    explanation: This option turns permanent scope into a perpetual "temporary" exemption.
+  - id: c
+    text: "`exclude` for `kube-system` (that is the policy's real scope), `PolicyException` for the legacy workload (a tolerated, owned, time-bound deviation)."
+    explanation: Correct. Scope belongs in the policy; deviations belong in a named, reviewable object that shows up in reports as `skip`. Excluded resources produce no report results at all, which is right for out-of-scope things and wrong for things you are tolerating.
+  - id: d
+    text: "`resourceFilters` for both."
+    explanation: This option is a cluster-wide evaluation filter, far too blunt for either job.
+  correct_option: c
+  explanation: Scope belongs in the policy; deviations belong in a named, reviewable object that shows up in reports as `skip`. Excluded resources produce no report results at all, which is right for out-of-scope things and wrong for things you are tolerating.
+- id: ats012-final-q13
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Find the metrics Service and port
+  source_readings:
+  - sections/section-030/module-01/course-01-metrics-endpoint-and-services.md
+  prompt: Which Service and port do you scrape for Kyverno's admission controller metrics?
+  options:
+  - id: a
+    text: "`kyverno-svc` on 443."
+    explanation: This option is the TLS webhook endpoint.
+  - id: b
+    text: "`kyverno-admission-controller-metrics` on 8000."
+    explanation: This option is the name people guess; it does not exist.
+  - id: c
+    text: "`kyverno-svc-metrics` on 8000, path `/metrics`."
+    explanation: Correct. All four controllers serve metrics on 8000 at `/metrics`, and the admission controller's metrics Service is named after its main Service (`kyverno-svc`), not after its Deployment.
+  - id: d
+    text: "`kyverno-reports-controller-metrics` on 8000."
+    explanation: This option is real, but serves the reports controller's own metrics.
+  correct_option: c
+  explanation: All four controllers serve metrics on 8000 at `/metrics`, and the admission controller's metrics Service is named after its main Service (`kyverno-svc`), not after its Deployment.
+- id: ats012-final-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Map documented metric names to exported names
+  source_readings:
+  - sections/section-030/module-01/course-02-core-metric-families.md
+  prompt: "`kyverno_policy_rule_info_total` wrapped in `rate()` returns near-zero. Why?"
+  options:
+  - id: a
+    text: The metric is disabled by default.
+    explanation: ","
+  - id: b
+    text: It is a gauge reporting `1` per active rule — an inventory, not an event counter — despite the `_total` suffix.
+    explanation: 'Correct. Rate of change over a constant `1` is zero. Count the series instead: `count(count(kyverno_policy_rule_info_total{...} == 1) by (policy_name))`. This is also the metric that catches a policy being deleted, which every other family reports as silence.'
+  - id: c
+    text: It only updates after a background scan.
+    explanation: This option all invent behaviour; the suffix is the only misleading thing here, and it comes from the Prometheus exporter's counter convention.
+  - id: d
+    text: "`rate()` cannot be used on metrics with more than five labels."
+    explanation: This option all invent behaviour; the suffix is the only misleading thing here, and it comes from the Prometheus exporter's counter convention.
+  correct_option: b
+  explanation: 'Rate of change over a constant `1` is zero. Count the series instead: `count(count(kyverno_policy_rule_info_total{...} == 1) by (policy_name))`. This is also the metric that catches a policy being deleted, which every other family reports as silence.'
+- id: ats012-final-q15
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Separate admission traffic from background scans
+  source_readings:
+  - sections/section-030/module-01/course-02-core-metric-families.md
+  prompt: Which label on `kyverno_policy_results_total` distinguishes a deploy-time rejection from an hourly background re-scan of the same old violation?
+  options:
+  - id: a
+    text: "`policy_background_mode`"
+    explanation: This option describes the policy's configuration, not this evaluation's trigger.
+  - id: b
+    text: "`resource_request_operation`"
+    explanation: This option is `create`/`update`/`delete`.
+  - id: c
+    text: "`policy_validation_mode`"
+    explanation: This option is `enforce`/`audit`.
+  - id: d
+    text: "`rule_execution_cause`, with values `admission_request` and `background_scan`"
+    explanation: Correct. Without filtering on it, a scan cycle re-confirming known violations looks identical to a rollout blocking real traffic — two very different pages at 3am.
+  correct_option: d
+  explanation: Without filtering on it, a scan cycle re-confirming known violations looks identical to a rollout blocking real traffic — two very different pages at 3am.
+- id: ats012-final-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Restrict measured namespaces with the metrics ConfigMap
+  source_readings:
+  - sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
+  prompt: You cannot find a `resource_namespace` label on `kyverno_policy_results_total`. What is going on and what is the cost of changing it?
+  options:
+  - id: a
+    text: The endpoint is broken; restart the controller.
+    explanation: This option mistakes a default for a fault.
+  - id: b
+    text: It ships in `disabledLabelDimensions` in the `kyverno-metrics` ConfigMap; enabling it multiplies the series count by the number of namespaces.
+    explanation: Correct. Kyverno deliberately disables the highest-cardinality dimensions on the busiest metrics. Re-enable per metric, where you will actually read it — every label value combination is a stored time series.
+  - id: c
+    text: It only appears on histogram metrics.
+    explanation: This option invent mechanisms.
+  - id: d
+    text: It requires the Prometheus Operator to be installed.
+    explanation: This option invent mechanisms.
+  correct_option: b
+  explanation: Kyverno deliberately disables the highest-cardinality dimensions on the busiest metrics. Re-enable per metric, where you will actually read it — every label value combination is a stored time series.
+- id: ats012-final-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain that metrics exclusion does not change enforcement
+  source_readings:
+  - sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
+  prompt: You edit `bucketBoundaries` and `metricsExposure` in `kyverno-metrics`, then scrape and see no change. What is missing, and what does fixing it cost?
+  options:
+  - id: a
+    text: Nothing is missing; the change propagates within an hour.
+    explanation: This option invents a refresh interval.
+  - id: b
+    text: "`--disableMetrics` must be set to `false` first."
+    explanation: This option is already the default.
+  - id: c
+    text: The affected controllers need a `rollout restart` — instruments are built at process start — and the restart resets process-lifetime counters to zero.
+    explanation: Correct. Label sets and bucket boundaries are fixed when the instruments are created. A restart applies them; the side effect is counters starting from zero, which `rate()` and `increase()` handle but an absolute-value dashboard does not.
+  - id: d
+    text: The ConfigMap must be renamed to `kyverno`.
+    explanation: This option names the ConfigMap that holds `resourceFilters`, a different system entirely.
+  correct_option: c
+  explanation: Label sets and bucket boundaries are fixed when the instruments are created. A restart applies them; the side effect is counters starting from zero, which `rate()` and `increase()` handle but an absolute-value dashboard does not.
+- id: ats012-final-q18
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose between metrics and reports for an investigation
+  source_readings:
+  - sections/section-030/module-02/course-02-using-metrics-in-practice.md
+  prompt: You need to know exactly which Pods currently violate a policy, and separately whether violations are trending upwards. Which signals?
+  options:
+  - id: a
+    text: Metrics for both — filter by `resource_name`.
+    explanation: This option invents a `resource_name` label that does not and should not exist.
+  - id: b
+    text: Reports for both; metrics carry no timing information.
+    explanation: This option ignores that metrics are precisely the time-series signal.
+  - id: c
+    text: Reports for "which Pods" (they carry `scope` per resource); metrics for "is it getting worse" (aggregates over time, no resource identity).
+    explanation: Correct. These are complementary by design. Reports are an inventory naming each resource; metrics are aggregates with no per-resource label (adding one would create a series per resource). Using either alone is how investigations go sideways.
+  - id: d
+    text: Admission controller logs for both.
+    explanation: This option makes logs the primary interface, which they are not.
+  correct_option: c
+  explanation: These are complementary by design. Reports are an inventory naming each resource; metrics are aggregates with no per-resource label (adding one would create a series per resource). Using either alone is how investigations go sideways.
+- id: ats012-final-01003-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say where severity and category in a report come from
+  source_readings:
+  - sections/section-010/module-03/course-01-severity-and-category-in-results.md
+  prompt: Where does the severity shown on a result in a `PolicyReport` come from?
+  options:
+  - id: a
+    text: From the Kubernetes event that Kyverno emits when the rule fails.
+    explanation: This option invents a source; reports are not built from events.
+  - id: b
+    text: From the policy annotation `policies.kyverno.io/severity`, copied into each
+      result.
+    explanation: Correct. Kyverno copies the `policies.kyverno.io/severity` and `category`
+      annotations of the policy into each result, so the report can be filtered by
+      them without looking up the policy.
+  - id: c
+    text: From the `validationFailureAction` of the policy.
+    explanation: This option confuses enforcement mode with severity; the two are
+      unrelated.
+  - id: d
+    text: From a label on the reported resource.
+    explanation: This option reads the wrong object; severity belongs to the policy.
+  correct_option: b
+  explanation: Kyverno copies the `policies.kyverno.io/severity` and `category` annotations
+    of the policy into each result, so the report can be filtered by them without
+    looking up the policy.
+- id: ats012-final-01003-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict what deleting a resource does to its report
+  source_readings:
+  - sections/section-010/module-03/course-02-report-lifecycle-and-tooling.md
+  prompt: A Pod that has a failing result in a `PolicyReport` is deleted. What happens
+    to that result?
+  options:
+  - id: a
+    text: It stays until an administrator deletes the report.
+    explanation: This option ignores ownership; reports are owned by the resource
+      they describe.
+  - id: b
+    text: It is removed with the report, because the report is owned by the Pod.
+    explanation: Correct. A report is owned by the resource it describes, so Kubernetes
+      garbage collection removes the report when the resource is deleted. Reports
+      are a current-state view, not a history.
+  - id: c
+    text: It moves to the `ClusterPolicyReport` as a historical record.
+    explanation: This option invents an archive behaviour that does not exist.
+  - id: d
+    text: It changes to `skip`.
+    explanation: This option confuses a deleted resource with an exempted one.
+  correct_option: b
+  explanation: A report is owned by the resource it describes, so Kubernetes garbage
+    collection removes the report when the resource is deleted. Reports are a current-state
+    view, not a history.
+- id: ats012-final-02003-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: State how a PolicyException expires
+  source_readings:
+  - sections/section-020/module-03/course-01-why-exceptions-need-an-end-date.md
+  prompt: How can a `PolicyException` be made to expire on its own?
+  options:
+  - id: a
+    text: Set `spec.expires` to a date.
+    explanation: This option invents a field; `PolicyException` has no expiry field.
+  - id: b
+    text: Add the annotation `cleanup.kyverno.io/ttl`.
+    explanation: This option uses an annotation; only the label is handled.
+  - id: c
+    text: Add the label `cleanup.kyverno.io/ttl` and let the cleanup controller delete
+      it.
+    explanation: Correct. The cleanup controller honours the label `cleanup.kyverno.io/ttl`
+      on any object. The exception is deleted when the time is up and the rule applies
+      again.
+  - id: d
+    text: 'Set `background: false` on the exception.'
+    explanation: This option confuses a scanning switch with a lifetime.
+  correct_option: c
+  explanation: The cleanup controller honours the label `cleanup.kyverno.io/ttl` on
+    any object. The exception is deleted when the time is up and the rule applies
+    again.
+- id: ats012-final-02003-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify the RBAC the cleanup controller needs
+  source_readings:
+  - sections/section-020/module-03/course-01-why-exceptions-need-an-end-date.md
+  prompt: 'An exception carries `cleanup.kyverno.io/ttl: 1h`, but it is still there
+    a day later and no error appeared. What is the most likely cause?'
+  options:
+  - id: a
+    text: The label must be an annotation.
+    explanation: This option has it backwards; the label is what is read.
+  - id: b
+    text: The cleanup controller cannot delete `policyexceptions` because no ClusterRole
+      with the aggregation label grants it.
+    explanation: 'Correct. The controller can only delete what RBAC allows. Without
+      a ClusterRole labelled `rbac.kyverno.io/aggregate-to-cleanup-controller: "true"`
+      that grants delete on `policyexceptions`, the label does nothing and nothing
+      reports it.'
+  - id: c
+    text: The exception was created in the wrong API version.
+    explanation: This option would be rejected at creation, not fail silently later.
+  - id: d
+    text: Exceptions can only be deleted by the admission controller.
+    explanation: This option names the wrong controller.
+  correct_option: b
+  explanation: 'The controller can only delete what RBAC allows. Without a ClusterRole
+    labelled `rbac.kyverno.io/aggregate-to-cleanup-controller: "true"` that grants
+    delete on `policyexceptions`, the label does nothing and nothing reports it.'
+- id: ats012-final-03003-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Query a counter correctly
+  source_readings:
+  - sections/section-030/module-03/course-01-reading-kyverno-metrics-with-promql.md
+  prompt: Which query tells you how many policy failures happened in the last hour?
+  options:
+  - id: a
+    text: '`kyverno_policy_results_total{rule_result="fail"}`'
+    explanation: This option reads the raw counter, which is the total since the controller
+      started.
+  - id: b
+    text: '`increase(kyverno_policy_results_total{rule_result="fail"}[1h])`'
+    explanation: Correct. A counter only grows, so you ask how much it grew over a
+      window. `increase()` does that and handles a counter reset when Kyverno restarts.
+  - id: c
+    text: "`histogram_quantile(0.5, kyverno_policy_results_total)`"
+    explanation: This option applies a histogram function to a counter.
+  - id: d
+    text: "`kyverno_policy_results_total[1h]` alone"
+    explanation: This option returns a range vector, which cannot be graphed or compared
+      as it stands.
+  correct_option: b
+  explanation: A counter only grows, so you ask how much it grew over a window. `increase()`
+    does that and handles a counter reset when Kyverno restarts.
+- id: ats012-final-03003-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Compute a latency percentile
+  source_readings:
+  - sections/section-030/module-03/course-01-reading-kyverno-metrics-with-promql.md
+  prompt: You compute p99 admission latency with `histogram_quantile`. Which expression
+    keeps what the function needs?
+  options:
+  - id: a
+    text: "`histogram_quantile(0.99, sum(rate(kyverno_admission_review_duration_seconds_bucket[5m])))`"
+    explanation: This option drops the `le` label that the function needs.
+  - id: b
+    text: "`histogram_quantile(0.99, sum by (le) (rate(kyverno_admission_review_duration_seconds_bucket[5m])))`"
+    explanation: Correct. The function interpolates over the `_bucket` series and
+      needs `le`, so the aggregation must be `sum by (le)`. The result is no more
+      precise than the configured bucket boundaries.
+  - id: c
+    text: "`histogram_quantile(0.99, kyverno_admission_review_duration_seconds_sum)`"
+    explanation: This option uses the `_sum` series, which has no buckets.
+  - id: d
+    text: "`rate(kyverno_admission_review_duration_seconds_count[5m]) * 0.99`"
+    explanation: This option computes a rate of requests, not a percentile.
+  correct_option: b
+  explanation: The function interpolates over the `_bucket` series and needs `le`,
+    so the aggregation must be `sum by (le)`. The result is no more precise than the
+    configured bucket boundaries.

@@ -37,3 +37,7 @@ After this module you can:
 ## Before you start
 
 You should be comfortable applying a `ClusterPolicy` in `Enforce` mode and reading a `PolicyReport` (Section 010). The linked lab gives you a kind cluster with Kyverno v1.13.2, an `Enforce` policy already in place, and a legacy workload that the policy blocks — your job is to let exactly that workload through, and nothing else.
+
+Launch your playground now, and keep it running next to you while you read the parts:
+
+<!-- astrona:playground -->

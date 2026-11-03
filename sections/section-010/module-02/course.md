@@ -38,3 +38,7 @@ After this module you can:
 ## Before you start
 
 You should have completed Module 1 and be comfortable reading a `PolicyReport` with `kubectl`. The linked lab gives you a kind cluster with Kyverno v1.13.2 and a pre-existing non-compliant Deployment, and asks you to make a background scan happen on your schedule rather than Kyverno's default hourly one.
+
+Launch your playground now, and keep it running next to you while you read the parts:
+
+<!-- astrona:playground -->

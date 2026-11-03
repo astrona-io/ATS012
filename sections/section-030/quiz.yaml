@@ -1,0 +1,342 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats012-030
+course_id: ATS012
+exam_code: KCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: Kyverno Metrics
+questions:
+- id: ats012-030-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Find the metrics Service and port for the admission controller
+  source_readings:
+  - sections/section-030/module-01/course-01-metrics-endpoint-and-services.md
+  prompt: You want to scrape Kyverno's admission controller metrics from inside the cluster. Which Service and port?
+  options:
+  - id: a
+    text: "`kyverno-svc` on port 443."
+    explanation: 'This option is the webhook endpoint: TLS on 443, expecting `AdmissionReview` payloads. A plain `curl` there fails confusingly.'
+  - id: b
+    text: "`kyverno-svc-metrics` on port 8000, path `/metrics`."
+    explanation: Correct. Every Kyverno controller serves Prometheus metrics on port 8000 at `/metrics`, and the admission controller's metrics Service is named `kyverno-svc-metrics` — matching its main Service `kyverno-svc` rather than its Deployment name.
+  - id: c
+    text: "`kyverno-admission-controller-metrics` on port 9090."
+    explanation: This option invents a Service name that does not exist (the naming trap) and the wrong port.
+  - id: d
+    text: "`kyverno-reports-controller-metrics` on port 8000."
+    explanation: This option is a real Service, but it serves the reports controller's own metrics — no admission latency there.
+  correct_option: b
+  explanation: Every Kyverno controller serves Prometheus metrics on port 8000 at `/metrics`, and the admission controller's metrics Service is named `kyverno-svc-metrics` — matching its main Service `kyverno-svc` rather than its Deployment name.
+- id: ats012-030-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Map the documented metric name to the exported name
+  source_readings:
+  - sections/section-030/module-01/course-02-core-metric-families.md
+  prompt: The Kyverno docs refer to `kyverno_policy_results`. Your `/metrics` endpoint shows `kyverno_policy_results_total`. What is going on?
+  options:
+  - id: a
+    text: Two different metrics with overlapping purposes.
+    explanation: This option invents a second metric.
+  - id: b
+    text: Kyverno instruments with OpenTelemetry; its Prometheus exporter appends the conventional `_total` suffix to counters at export time. Query the name the endpoint shows.
+    explanation: Correct. The instrument name in code and documentation has no suffix; the Prometheus exporter adds `_total` because that is the Prometheus convention for counters. PromQL must use the exported name. Grepping the prefix (`^kyverno_policy_results`) matches either form.
+  - id: c
+    text: The `_total` version is deprecated.
+    explanation: This option invents a deprecation.
+  - id: d
+    text: "`_total` only appears once the counter exceeds zero."
+    explanation: This option invents conditional naming; the `# TYPE` line is present regardless of value.
+  correct_option: b
+  explanation: The instrument name in code and documentation has no suffix; the Prometheus exporter adds `_total` because that is the Prometheus convention for counters. PromQL must use the exported name. Grepping the prefix (`^kyverno_policy_results`) matches either form.
+- id: ats012-030-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Separate admission traffic from background scans with a label
+  source_readings:
+  - sections/section-030/module-01/course-02-core-metric-families.md
+  prompt: Which label on `kyverno_policy_results_total` separates live admission traffic from background-scan re-evaluation?
+  options:
+  - id: a
+    text: "`policy_background_mode`"
+    explanation: This option reports whether the policy has background mode enabled, not what caused this particular evaluation.
+  - id: b
+    text: "`rule_execution_cause`, with values `admission_request` and `background_scan`"
+    explanation: Correct. `rule_execution_cause` records what triggered the evaluation. Without filtering on it, a spike caused by hourly background scans looks identical to a spike caused by real deploy traffic being rejected — two very different incidents.
+  - id: c
+    text: "`policy_validation_mode`"
+    explanation: This option is `enforce` versus `audit`.
+  - id: d
+    text: "`resource_request_operation`"
+    explanation: This option is `create`/`update`/`delete`.
+  correct_option: b
+  explanation: "`rule_execution_cause` records what triggered the evaluation. Without filtering on it, a spike caused by hourly background scans looks identical to a spike caused by real deploy traffic being rejected — two very different incidents."
+- id: ats012-030-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Avoid rate() on a gauge
+  source_readings:
+  - sections/section-030/module-01/course-02-core-metric-families.md
+  prompt: You wrap `kyverno_policy_rule_info_total` in `rate()` and get meaningless near-zero numbers. Why?
+  options:
+  - id: a
+    text: The metric is disabled by default.
+    explanation: This option is wrong — it ships enabled, with `resource_namespace`/`policy_namespace` dimensions disabled.
+  - id: b
+    text: It is a gauge reporting `1` per active rule — an inventory, not an event count — despite the `_total` suffix. Count it with `count(... == 1)` instead.
+    explanation: Correct. `kyverno_policy_rule_info_total` is a gauge whose value is `1` for each rule currently present in the cluster. Rate-of-change over a constant is zero. The useful query counts distinct series, e.g. `count(count(kyverno_policy_rule_info_total{policy_validation_mode="enforce"} == 1) by (policy_name))`.
+  - id: c
+    text: "`rate()` requires a five-minute window and you used a shorter one."
+    explanation: This option misattributes the problem to the window.
+  - id: d
+    text: The metric only populates after a background scan.
+    explanation: This option is wrong — it reflects policy inventory, available as soon as a policy exists.
+  correct_option: b
+  explanation: '`kyverno_policy_rule_info_total` is a gauge whose value is `1` for each rule currently present in the cluster. Rate-of-change over a constant is zero. The useful query counts distinct series, e.g. `count(count(kyverno_policy_rule_info_total{policy_validation_mode="enforce"} == 1) by (policy_name))`.'
+- id: ats012-030-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why default metrics omit resource_namespace
+  source_readings:
+  - sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
+  prompt: You scrape a stock Kyverno install and cannot find a `resource_namespace` label on `kyverno_policy_results_total`. Is something broken?
+  options:
+  - id: a
+    text: Yes — the metrics endpoint is misconfigured.
+    explanation: This option mistakes a deliberate default for a fault.
+  - id: b
+    text: No. The default `metricsExposure` in the `kyverno-metrics` ConfigMap lists `resource_namespace` (and `policy_namespace`) under `disabledLabelDimensions` for that metric, to keep series cardinality down.
+    explanation: Correct. Kyverno deliberately ships with the highest-cardinality label dimensions disabled on the busiest metrics. Adding `resource_namespace` multiplies the series count by the number of namespaces, which on a large cluster is a real cost. You can re-enable it per metric when you need the attribution.
+  - id: c
+    text: No — that label only appears on histogram metrics.
+    explanation: This option invents a restriction.
+  - id: d
+    text: Yes — the reports controller must be restarted to publish it.
+    explanation: This option has the mechanism backwards — a restart applies a config change, it does not add labels that configuration disabled.
+  correct_option: b
+  explanation: Kyverno deliberately ships with the highest-cardinality label dimensions disabled on the busiest metrics. Adding `resource_namespace` multiplies the series count by the number of namespaces, which on a large cluster is a real cost. You can re-enable it per metric when you need the attribution.
+- id: ats012-030-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Restrict which namespaces are measured and explain an empty include
+  source_readings:
+  - sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
+  prompt: Which key in the `kyverno-metrics` ConfigMap restricts *which namespaces are measured at all*, and what happens when `include` is empty?
+  options:
+  - id: a
+    text: "`metricsExposure`; an empty `include` disables the metric."
+    explanation: This option is per-metric label and on/off control, not namespace selection.
+  - id: b
+    text: "`namespaces`, holding JSON with `include` and `exclude` lists; an empty `include` means all namespaces are measured, and `exclude` takes precedence."
+    explanation: Correct. `namespaces` is a JSON string like `{"exclude":[],"include":[]}`. Empty `include` means everything is measured; populating it narrows measurement to those namespaces; `exclude` is applied on top and wins.
+  - id: c
+    text: "`bucketBoundaries`; an empty `include` means default buckets."
+    explanation: This option is histogram bucket boundaries.
+  - id: d
+    text: "`resourceFilters`; an empty `include` means nothing is measured."
+    explanation: This option is a key in the *`kyverno`* ConfigMap and controls policy *evaluation*, not measurement.
+  correct_option: b
+  explanation: '`namespaces` is a JSON string like `{"exclude":[],"include":[]}`. Empty `include` means everything is measured; populating it narrows measurement to those namespaces; `exclude` is applied on top and wins.'
+- id: ats012-030-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain that excluding a namespace from metrics does not change enforcement
+  source_readings:
+  - sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
+  prompt: You exclude `ci-builds` from the `namespaces` key of `kyverno-metrics`. What happens to policy enforcement in `ci-builds`?
+  options:
+  - id: a
+    text: Policies stop applying there.
+    explanation: This option confuses measurement with enforcement.
+  - id: b
+    text: Nothing — enforcement is unchanged. You have stopped counting, not stopped policing; `resourceFilters` in the `kyverno` ConfigMap is what controls evaluation.
+    explanation: Correct. Metrics configuration and policy evaluation are separate systems. A namespace excluded from metrics is still fully evaluated, still blocked or admitted the same way, and still reported on.
+  - id: c
+    text: Policies apply but stop producing PolicyReports there.
+    explanation: This option confuses metrics configuration with reporting configuration, which lives in the reports controller's flags and `resourceFilters`.
+  - id: d
+    text: Only `Audit`-mode policies stop applying there.
+    explanation: This option also confuses measurement with enforcement; no policy mode is affected by the metrics namespaces key.
+  correct_option: b
+  explanation: Metrics configuration and policy evaluation are separate systems. A namespace excluded from metrics is still fully evaluated, still blocked or admitted the same way, and still reported on.
+- id: ats012-030-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Remember that metrics configuration needs a reload before it shows
+  source_readings:
+  - sections/section-030/module-02/course-01-the-kyverno-metrics-configmap.md
+  prompt: You edit `metricsExposure` and `bucketBoundaries`, then scrape immediately and see no change. What did you forget?
+  options:
+  - id: a
+    text: Metrics take one hour to refresh.
+    explanation: This option invents a refresh interval.
+  - id: b
+    text: Instruments are built at controller startup, so the affected controllers need a `rollout restart` — accepting that this resets counters to zero.
+    explanation: Correct. Label sets and histogram bucket boundaries are fixed when the instruments are created at process start. Restarting the relevant controllers applies the new configuration; the side effect is that process-lifetime counters restart at zero, which `rate()` and `increase()` handle correctly.
+  - id: c
+    text: You must also set `--disableMetrics=false`.
+    explanation: This option is already the default, and would be an all-or-nothing switch anyway.
+  - id: d
+    text: The ConfigMap must be named `kyverno` rather than `kyverno-metrics`.
+    explanation: This option is wrong — `kyverno-metrics` is the correct ConfigMap; `kyverno` holds `resourceFilters` and webhook configuration.
+  correct_option: b
+  explanation: Label sets and histogram bucket boundaries are fixed when the instruments are created at process start. Restarting the relevant controllers applies the new configuration; the side effect is that process-lifetime counters restart at zero, which `rate()` and `increase()` handle correctly.
+- id: ats012-030-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Read admission latency to judge a slow-deploy complaint
+  source_readings:
+  - sections/section-030/module-02/course-02-using-metrics-in-practice.md
+  prompt: A team says deploys got slow after a policy rollout. Admission `histogram_quantile(0.99, ...)` over `kyverno_admission_review_duration_seconds_bucket` sits at 12ms. What is the correct conclusion, and what would you check next if it had been 2 seconds?
+  options:
+  - id: a
+    text: Kyverno is the cause; check `kyverno_policy_changes_total`.
+    explanation: This option asserts causation the data contradicts; `kyverno_policy_changes_total` tells you *when* policy changed, not that it is slow.
+  - id: b
+    text: 12ms of added admission latency does not explain slow deploys, so look elsewhere. Had it been 2s, the next step is `kyverno_policy_execution_duration_seconds` to find which rule is expensive, then `kyverno_client_queries_total` to see whether it is making API calls per evaluation.
+    explanation: Correct. The p99 of end-to-end admission review is exactly the latency Kyverno adds to matching writes. At 12ms it is not the explanation, and you have evidence rather than opinion. The escalation path for a genuinely high value is per-rule timing first, then Kyverno's own API call rate.
+  - id: c
+    text: The quantile is meaningless without the `_sum` series.
+    explanation: This option is wrong — `histogram_quantile` needs the `_bucket` series, which is what was used.
+  - id: d
+    text: Kyverno is the cause; the histogram under-reports because buckets stop at 30s.
+    explanation: This option invents an under-reporting argument; anything above the top boundary lands in `+Inf`, and 12ms is nowhere near it.
+  correct_option: b
+  explanation: The p99 of end-to-end admission review is exactly the latency Kyverno adds to matching writes. At 12ms it is not the explanation, and you have evidence rather than opinion. The escalation path for a genuinely high value is per-rule timing first, then Kyverno's own API call rate.
+- id: ats012-030-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose between metrics and reports
+  source_readings:
+  - sections/section-030/module-02/course-02-using-metrics-in-practice.md
+  prompt: You need to know which specific Pods violate a policy. Metrics or reports?
+  options:
+  - id: a
+    text: Metrics — filter `kyverno_policy_results_total` by `resource_name`.
+    explanation: This option invents a label that does not exist.
+  - id: b
+    text: Reports. Metrics are aggregates and carry no resource identity; `PolicyReport` objects name every non-compliant resource via their `scope`.
+    explanation: Correct. There is no `resource_name` label on Kyverno's metrics, and there could not sensibly be one — it would create a time series per resource. Metrics answer "how often, and is it getting worse"; reports answer "which resources, right now".
+  - id: c
+    text: Either; both carry per-resource identity.
+    explanation: This option misses the fundamental split between aggregates and inventory.
+  - id: d
+    text: Neither; you must read the admission controller's logs.
+    explanation: This option ignores the reporting system entirely; logs are a last resort, not the designed answer.
+  correct_option: b
+  explanation: There is no `resource_name` label on Kyverno's metrics, and there could not sensibly be one — it would create a time series per resource. Metrics answer "how often, and is it getting worse"; reports answer "which resources, right now".
+- id: ats012-030-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Query a counter correctly
+  source_readings:
+  - sections/section-030/module-03/course-01-reading-kyverno-metrics-with-promql.md
+  prompt: Which query tells you how many policy failures happened in the last hour?
+  options:
+  - id: a
+    text: '`kyverno_policy_results_total{rule_result="fail"}`'
+    explanation: This option reads the raw counter, which is the total since the controller
+      started.
+  - id: b
+    text: '`increase(kyverno_policy_results_total{rule_result="fail"}[1h])`'
+    explanation: Correct. A counter only grows, so you ask how much it grew over a
+      window. `increase()` does that and handles a counter reset when Kyverno restarts.
+  - id: c
+    text: "`histogram_quantile(0.5, kyverno_policy_results_total)`"
+    explanation: This option applies a histogram function to a counter.
+  - id: d
+    text: "`kyverno_policy_results_total[1h]` alone"
+    explanation: This option returns a range vector, which cannot be graphed or compared
+      as it stands.
+  correct_option: b
+  explanation: A counter only grows, so you ask how much it grew over a window. `increase()`
+    does that and handles a counter reset when Kyverno restarts.
+- id: ats012-030-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Compute a latency percentile
+  source_readings:
+  - sections/section-030/module-03/course-01-reading-kyverno-metrics-with-promql.md
+  prompt: You compute p99 admission latency with `histogram_quantile`. Which expression
+    keeps what the function needs?
+  options:
+  - id: a
+    text: "`histogram_quantile(0.99, sum(rate(kyverno_admission_review_duration_seconds_bucket[5m])))`"
+    explanation: This option drops the `le` label that the function needs.
+  - id: b
+    text: "`histogram_quantile(0.99, sum by (le) (rate(kyverno_admission_review_duration_seconds_bucket[5m])))`"
+    explanation: Correct. The function interpolates over the `_bucket` series and
+      needs `le`, so the aggregation must be `sum by (le)`. The result is no more
+      precise than the configured bucket boundaries.
+  - id: c
+    text: "`histogram_quantile(0.99, kyverno_admission_review_duration_seconds_sum)`"
+    explanation: This option uses the `_sum` series, which has no buckets.
+  - id: d
+    text: "`rate(kyverno_admission_review_duration_seconds_count[5m]) * 0.99`"
+    explanation: This option computes a rate of requests, not a percentile.
+  correct_option: b
+  explanation: The function interpolates over the `_bucket` series and needs `le`,
+    so the aggregation must be `sum by (le)`. The result is no more precise than the
+    configured bucket boundaries.
+- id: ats012-030-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Tell the Prometheus Operator objects apart
+  source_readings:
+  - sections/section-030/module-03/course-02-alert-rules-that-matter.md
+  prompt: Which Prometheus Operator object holds an alerting rule, and which one tells
+    Prometheus what to scrape?
+  options:
+  - id: a
+    text: "`ServiceMonitor` holds alerts; `PrometheusRule` selects targets."
+    explanation: This option has the two objects swapped.
+  - id: b
+    text: "`PrometheusRule` holds alerts; `ServiceMonitor` selects the Service and
+      port to scrape."
+    explanation: Correct. A `ServiceMonitor` names a Service and port to scrape; a
+      `PrometheusRule` holds recording and alerting rules. Kyverno does not install
+      the Operator.
+  - id: c
+    text: Both are a `ClusterPolicy` field.
+    explanation: This option confuses Kyverno resources with Operator resources.
+  - id: d
+    text: "`PrometheusRule` scrapes and `ServiceMonitor` alerts."
+    explanation: This option swaps the roles and states them wrongly.
+  correct_option: b
+  explanation: A `ServiceMonitor` names a Service and port to scrape; a `PrometheusRule`
+    holds recording and alerting rules. Kyverno does not install the Operator.
+- id: ats012-030-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Design an alert that stays quiet
+  source_readings:
+  - sections/section-030/module-03/course-02-alert-rules-that-matter.md
+  prompt: An alert on `kyverno_policy_results_total{rule_result="fail"} > 10` fires
+    after every Kyverno restart and never resolves. What is the best fix?
+  options:
+  - id: a
+    text: Raise the threshold to 1000.
+    explanation: This option hides the problem; a cumulative counter will cross any
+      threshold eventually.
+  - id: b
+    text: Use `increase(...[15m])` and add a `for:` duration so the alert follows
+      recent growth.
+    explanation: Correct. A bare counter keeps its value after the failures stop,
+      so the alert never clears. Wrapping it in `increase()` makes it follow recent
+      growth, and `for:` filters out a single noisy sample.
+  - id: c
+    text: Remove the `severity` label.
+    explanation: This option has no effect on when the alert fires.
+  - id: d
+    text: Alert on `kyverno_policy_results_total` for `rule_result="pass"` instead.
+    explanation: This option alerts on the wrong signal.
+  correct_option: b
+  explanation: A bare counter keeps its value after the failures stop, so the alert
+    never clears. Wrapping it in `increase()` makes it follow recent growth, and `for:`
+    filters out a single noisy sample.

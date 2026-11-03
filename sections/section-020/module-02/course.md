@@ -24,3 +24,7 @@ After this module you can:
 ## Before you start
 
 You should have completed Module 1 and have a working exception — feature flags set, rule waived, report showing `skip`. The linked lab starts from roughly that state and asks you to make the exemption dramatically narrower, and then to stop anyone from writing a sloppy one.
+
+Launch your playground now, and keep it running next to you while you read the parts:
+
+<!-- astrona:playground -->

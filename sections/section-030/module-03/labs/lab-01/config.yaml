@@ -1,0 +1,34 @@
+metadata:
+  name: "ats-012-lab-012"
+  docs:
+    solution: "solution.md"
+    question: "question.md"
+
+bootstrap:
+  init:
+    - name: "install-kyverno"
+      description: "Installs Kyverno onto the kind cluster"
+      type: "file"
+      source: "bootstrap/01-install-kyverno.sh"
+    - name: "lab-012-setup"
+      description: "Creates load-ns, a curl probe Pod and the Enforce policy load-require-limits"
+      type: "file"
+      source: "bootstrap/02-seed.sh"
+
+validation:
+  scripts:
+    - name: "load-was-generated"
+      description: "Confirms three compliant Pods run in load-ns and that no Pod without limits was admitted"
+      type: "file"
+      source: "validation/01-load.sh"
+    - name: "findings-match-the-endpoint"
+      description: "Confirms the metrics-findings ConfigMap records values that agree with what the metrics endpoint reports"
+      type: "file"
+      source: "validation/02-findings.sh"
+    - name: "alert-rule-is-sound"
+      description: "Confirms the stored alert rule has the alert name, a counter-safe expression on the failure metric, a for duration and a severity label"
+      type: "file"
+      source: "validation/03-alert-rule.sh"
+
+teardown:
+  keepCluster: false
