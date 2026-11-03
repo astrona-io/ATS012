@@ -1,6 +1,5 @@
 # Part 1 — Narrowing an Exception: conditions, podSecurity & background
 
-> Prerequisite: [Module landing page](./course.md). Next: [Part 2 — Governance, Alternatives & Auditing](./course-02-governance-and-alternatives.md).
 
 ## Why `match` alone is usually too coarse
 

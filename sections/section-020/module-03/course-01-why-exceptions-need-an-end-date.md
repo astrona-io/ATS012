@@ -58,4 +58,3 @@ kubectl auth can-i delete policyexceptions.kyverno.io -n platform-ns \
 
 In the playground, apply the ClusterRole above, run the `can-i` command until it says `yes`, then create a throwaway exception with `cleanup.kyverno.io/ttl: 1m` and watch it disappear. The cleanup controller checks periodically, so allow a little more than the stated minute.
 
-Next: [Part 2 — Enforcing and Reviewing Time-Boxed Exceptions](./course-02-enforcing-and-reviewing-time-boxed-exceptions.md)

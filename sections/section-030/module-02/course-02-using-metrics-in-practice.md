@@ -1,6 +1,5 @@
 # Part 2 — Using Metrics in Practice
 
-> Prerequisite: [Part 1 — The kyverno-metrics ConfigMap](./course-01-the-kyverno-metrics-configmap.md). Next: [Summary](./course-05-summary.md).
 
 ## The alerts worth having
 

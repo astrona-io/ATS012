@@ -1,6 +1,5 @@
 # Part 1 — Enabling PolicyExceptions
 
-> Prerequisite: [Module landing page](./course.md). Next: [Part 2 — The Anatomy of a PolicyException](./course-02-anatomy-of-a-policyexception.md).
 
 ## The feature is off by default, and that is a security decision
 

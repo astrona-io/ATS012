@@ -1,6 +1,5 @@
 # Part 1 — The kyverno-metrics ConfigMap
 
-> Prerequisite: [Module landing page](./course.md). Next: [Part 2 — Using Metrics in Practice](./course-02-using-metrics-in-practice.md).
 
 ## Where the configuration lives
 

@@ -1,6 +1,5 @@
 # Part 2 — Tuning and Troubleshooting Reports
 
-> Prerequisite: [Part 1 — The Reports Pipeline](./course-01-the-reports-pipeline.md).
 
 Every knob here lives on a controller Deployment's container args or in the `kyverno` ConfigMap. There is no `spec` field on a policy that changes how reporting works — reporting is an installation-level concern, which is exactly why it tends to be owned by the platform team rather than the policy authors.
 

@@ -1,6 +1,5 @@
 # Part 1 — The Reports Pipeline
 
-> Prerequisite: [Module landing page](./course.md). Next: [Part 2 — Tuning and Troubleshooting Reports](./course-02-tuning-and-troubleshooting-reports.md).
 
 ## Four controllers, and only two of them touch reports
 

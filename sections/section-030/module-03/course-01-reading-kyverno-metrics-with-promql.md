@@ -57,4 +57,3 @@ Three details people get wrong:
 
 In the playground, run `kubectl exec metrics-probe -- curl -s http://kyverno-svc-metrics.kyverno.svc:8000/metrics` and find the `kyverno_policy_results_total` lines for `load-require-limits`. Try to create one more Pod in `load-ns` that breaks the policy, scrape again, and watch the right counter move by one.
 
-Next: [Part 2 — Alert Rules That Matter](./course-02-alert-rules-that-matter.md)

@@ -1,6 +1,5 @@
 # Part 1 — PolicyReport and ClusterPolicyReport
 
-> Prerequisite: [Module landing page](./course.md). Next: [Part 2 — Reading Results: the Five Result Types](./course-02-reading-results-and-result-types.md).
 
 ## Two objects, one rule for choosing between them
 
@@ -15,7 +14,6 @@ Kyverno does not invent its own reporting format. It writes into two Custom Reso
 
 The rule for which one a finding lands in is simple and has nothing to do with the policy: **it follows the resource being reported on, not the policy doing the reporting.** A `ClusterPolicy` — cluster-scoped itself — that evaluates Pods writes into namespaced `PolicyReport` objects in each Pod's own namespace, because a Pod is a namespaced resource. The same `ClusterPolicy` evaluating `Namespace` objects writes into `ClusterPolicyReport`, because a Namespace is cluster-scoped.
 
-> As an analogy: think of the two report kinds as two filing cabinets in a building — one cabinet per floor for the things that live on that floor, and one cabinet in the lobby for things that belong to the building itself. The inspector (the policy) is the same person walking the whole building; which cabinet the paperwork goes into depends on what was inspected, not on who inspected it. The analogy breaks down in one place: unlike paper files, these are live objects Kyverno rewrites continuously as the cluster changes.
 
 ## Why your reports have UUID names
 

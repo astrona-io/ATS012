@@ -1,6 +1,5 @@
 # Part 1 — The Metrics Endpoint and Its Services
 
-> Prerequisite: [Module landing page](./course.md). Next: [Part 2 — The Core Metric Families](./course-02-core-metric-families.md).
 
 ## One endpoint per controller, all on 8000
 

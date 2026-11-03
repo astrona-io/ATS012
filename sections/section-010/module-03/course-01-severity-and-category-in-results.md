@@ -1,6 +1,5 @@
 # Part 1 — Severity and Category in Results
 
-> Prerequisite: [Module 2 — The Reports Pipeline & Its Tuning](../module-02/course.md). Next: [Part 2 — Report Lifecycle and the Tool Ecosystem](./course-02-report-lifecycle-and-tooling.md).
 
 A failing result tells you that a rule was broken. It does not tell you whether to wake someone up. That judgement belongs to the policy author, who records it in two annotations on the policy.
 
