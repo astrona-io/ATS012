@@ -79,7 +79,7 @@ modules:
         difficulty: beginner
         estimated_duration: 20m
         topic: reports
-        task_kind: explore
+        task_kind: build
         tags: [policyreport, clusterpolicyreport, audit, warn, jsonpath]
         learning_goals:
           - Find the PolicyReport a policy produced for a namespace
@@ -121,7 +121,7 @@ modules:
         difficulty: intermediate
         estimated_duration: 25m
         topic: reports
-        task_kind: troubleshoot
+        task_kind: build
         tags: [reports-controller, background-scan, ephemeralreport, scan-interval]
         learning_goals:
           - Lower the background scan interval so existing resources are scanned
@@ -397,7 +397,7 @@ modules:
         difficulty: beginner
         estimated_duration: 20m
         topic: metrics
-        task_kind: explore
+        task_kind: build
         tags: [metrics, prometheus, kyverno-svc-metrics, counters]
         learning_goals:
           - Scrape the metrics endpoint from inside the cluster
@@ -481,7 +481,7 @@ modules:
         estimated_duration: 25m
         topic: metrics
         task_kind: build
-        tags: [promql, increase, rate, histogram_quantile, prometheusrule, alerting]
+        tags: [promql, increase, rate, histogram-quantile, prometheusrule, alerting]
         learning_goals:
           - Read admission pass and fail counters for one policy
           - Record findings that agree with the endpoint
